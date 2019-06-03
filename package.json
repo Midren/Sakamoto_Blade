@@ -1,0 +1,25 @@
+{
+  "name": "sakamoto_blade",
+  "version": "1.0.0",
+  "description": "2D game with platform and shooting aspects",
+  "main": "dist/bundle.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RomanMilishchuk/Sakamoto_Blade.git"
+  },
+  "author": "@RomanMilishchuk @wardady",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RomanMilishchuk/Sakamoto_Blade/issues"
+  },
+  "homepage": "https://github.com/RomanMilishchuk/Sakamoto_Blade#readme",
+  "dependencies": {
+    "css-loader": "^2.1.1",
+    "style-loader": "^0.23.1",
+    "url-loader": "^1.1.2",
+    "webpack": "^4.32.2"
+  }
+}
