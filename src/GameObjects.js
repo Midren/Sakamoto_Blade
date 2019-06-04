@@ -26,7 +26,7 @@ export class MovableObject extends GameObject {
     move() {
         this.x += this.speed[0];
         this.y += this.speed[1];
-        this.speed = this.speed.map(val => val *= 0.7);
+        this.speed = this.speed.map(val => Math.abs(val * 0.7) < 1 ? 0 : val * 0.7);
     }
 
     onCollision(other) {

@@ -37,7 +37,7 @@ let player;
 
 const render = (playerImg, blocksImg, backgroundImg ) => {
     ctx.clearRect(0, 0, 1200, 720);
-    // ctx.drawImage(backgroundImg["frame_000.png"], 0, 0);
+    ctx.drawImage(backgroundImg["frame_000.png"], 0, 0);
     // ctx.drawImage(playerImg["0l.png"], 550, 240, 100, 80);
     // ctx.drawImage(blocksImg["platform.png"], 550, 320, 100, 100);
     player.move();

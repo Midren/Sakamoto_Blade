@@ -2,7 +2,7 @@ export const keyController = (player, e) => {
     switch (e.key) {
         case "a":
         case "ArrowLeft":
-            player.speed = [10, 0];
+            player.speed[0] += 10;
             player.direction = -1;
             // player.move(-1);
             console.log("Left");
@@ -10,7 +10,7 @@ export const keyController = (player, e) => {
         case "d":
         case "ArrowRight":
             console.log("Right");
-            player.speed = [10, 0];
+            player.speed[0] += 10;
             player.direction = 1;
             // player.move(1);
             break;
