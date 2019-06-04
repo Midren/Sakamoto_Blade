@@ -1,3 +1,5 @@
+import {keyController} from "./Controller";
+
 const canvas = document.getElementById("field");
 const ctx = canvas.getContext("2d");
 
@@ -36,6 +38,8 @@ const startGame = (playerImg, blocksImg, backgroundImg) => {
     ctx.drawImage(backgroundImg["frame_000.png"], 0, 0);
     ctx.drawImage(playerImg["0l.png"], 550, 240, 100, 80);
     ctx.drawImage(blocksImg["platform.png"], 550, 320, 100, 100);
+
+    document.onkeypress = keyController;
 };
 
 let socket = new WebSocket("ws://127.0.0.1:3000");
