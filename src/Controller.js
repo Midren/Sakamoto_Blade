@@ -1,12 +1,18 @@
-export const keyController = (e) => {
+export const keyController = (player, e) => {
     switch (e.key) {
         case "a":
         case "ArrowLeft":
+            player.speed = [10, 0];
+            player.direction = -1;
+            // player.move(-1);
             console.log("Left");
             break;
         case "d":
         case "ArrowRight":
             console.log("Right");
+            player.speed = [10, 0];
+            player.direction = 1;
+            // player.move(1);
             break;
         case "w":
         case "ArrowUp":

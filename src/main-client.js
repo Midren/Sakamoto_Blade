@@ -1,4 +1,5 @@
 import {keyController} from "./Controller";
+import {Player} from "./Entity";
 
 const canvas = document.getElementById("field");
 const ctx = canvas.getContext("2d");
@@ -32,14 +33,31 @@ let playerImg = loadImgs("img/player/", playerImagesSrc);
 let blocksImg = loadImgs("img/blocks/", blocksImagesSrc);
 let backgroundImg = loadImgs("img/background/", backgroundImagesSrc);
 
+let player;
+
+const render = (playerImg, blocksImg, backgroundImg ) => {
+    ctx.clearRect(0, 0, 1200, 720);
+    // ctx.drawImage(backgroundImg["frame_000.png"], 0, 0);
+    // ctx.drawImage(playerImg["0l.png"], 550, 240, 100, 80);
+    // ctx.drawImage(blocksImg["platform.png"], 550, 320, 100, 100);
+    player.move();
+    player.render(ctx);
+
+    requestAnimationFrame(render.bind(null, playerImg, blocksImg, backgroundImg));
+};
+
 const startGame = (playerImg, blocksImg, backgroundImg) => {
     document.getElementById("loading_screen").style.display = "none";
     document.getElementById("field").style.display = "flex";
-    ctx.drawImage(backgroundImg["frame_000.png"], 0, 0);
-    ctx.drawImage(playerImg["0l.png"], 550, 240, 100, 80);
-    ctx.drawImage(blocksImg["platform.png"], 550, 320, 100, 100);
 
-    document.onkeypress = keyController;
+    player = new Player(50, 50, 100, 100, playerImg, [0, 0], 1);
+
+    document.onkeypress = keyController.bind(null, player);
+    // ctx.drawImage(backgroundImg["frame_000.png"], 0, 0);
+    // ctx.drawImage(playerImg["0l.png"], 550, 240, 100, 80);
+    // ctx.drawImage(blocksImg["platform.png"], 550, 320, 100, 100);
+    requestAnimationFrame(render.bind(null, playerImg, blocksImg, backgroundImg));
+    // render();
 };
 
 let socket = new WebSocket("ws://127.0.0.1:3000");

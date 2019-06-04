@@ -1,17 +1,16 @@
 import {MovableObject} from "./GameObjects";
 
 export class Player extends MovableObject {
-    static gravity = 3;
-
-    constructor(x, y, height, width, image, speed, direction) {
-        super(x, y, height, width, image, speed);
+    constructor(x, y, height, width, images, speed, direction) {
+        super(x, y, height, width, images["0l.png"], speed);
+        this.images = images;
         this.direction = direction;
     }
 
-    move(direction) {
-        this.speed[0] *= direction;
+    move() {
+        this.speed[0] *= this.direction;
         super.move();
-        this.speed[0] *= direction;
+        this.speed[0] *= this.direction;
     }
 
     jump() {
@@ -30,6 +29,14 @@ export class Player extends MovableObject {
 
     }
 
+    render(ctx) {
+        if(this.direction === -1) {
+            this.image = this.images["0l.png"]
+        } else {
+            this.image = this.images["0r.png"]
+        }
+        super.render(ctx);
+    }
 }
 
 export class Bullet extends MovableObject {
