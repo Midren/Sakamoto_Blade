@@ -1,9 +1,7 @@
-const socket = io();
-
 const canvas = document.getElementById("field");
 const ctx = canvas.getContext("2d");
 
-const loadImg = (path, imagesSrc) => new Promise((res, rej) => {
+const loadImgs = (path, imagesSrc) => new Promise((res, rej) => {
     let images = {};
 
     let loadedImages = 0;
@@ -28,9 +26,9 @@ let blocksImagesSrc = ["lava.png", "platform.png", "water.png"];
 let backgroundImagesSrc = Array(171).fill(0).map((val, i) =>
     "frame_" + i.toString().padStart(3, "0") + ".png");
 
-let playerImg = loadImg("img/player/", playerImagesSrc);
-let blocksImg = loadImg("img/blocks/", blocksImagesSrc);
-let backgroundImg = loadImg("img/background/", backgroundImagesSrc);
+let playerImg = loadImgs("img/player/", playerImagesSrc);
+let blocksImg = loadImgs("img/blocks/", blocksImagesSrc);
+let backgroundImg = loadImgs("img/background/", backgroundImagesSrc);
 
 const startGame = (playerImg, blocksImg, backgroundImg) => {
     document.getElementById("loading_screen").style.display = "none";
@@ -38,13 +36,19 @@ const startGame = (playerImg, blocksImg, backgroundImg) => {
     ctx.drawImage(backgroundImg["frame_000.png"], 0, 0);
     ctx.drawImage(playerImg["0l.png"], 550, 240, 100, 80);
     ctx.drawImage(blocksImg["platform.png"], 550, 320, 100, 100);
-    socket.emit("game-start");
 };
 
-const loadingGame = () => playerImg.then((player) =>
-    blocksImg.then((blocks) =>
-        backgroundImg.then((background) =>
-            startGame(player, blocks, background))));
+let socket = new WebSocket("ws://127.0.0.1:3000");
 
-socket.on("connect", loadingGame);
+socket.addEventListener('open', event => {
+    console.log("Connected");
+
+    Promise.all([playerImg, blocksImg, backgroundImg])
+        .then(values =>
+            startGame.bind(null, ...values)());
+});
+
+socket.addEventListener('message', (event) => {
+    console.log("Get data ", event.data);
+});
 

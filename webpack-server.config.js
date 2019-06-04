@@ -16,7 +16,7 @@ module.exports = {
         filename: "bundle-server.js"
     },
     externals: [nodeExternals({
-        whitelist: ['express*', 'socket.io-*']
+        whitelist: ['express*', 'websocket*']
     })],
     watch: true,
 };
