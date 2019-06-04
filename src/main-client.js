@@ -50,7 +50,7 @@ const startGame = (playerImg, blocksImg, backgroundImg) => {
     document.getElementById("loading_screen").style.display = "none";
     document.getElementById("field").style.display = "flex";
 
-    player = new Player(50, 50, 100, 100, playerImg, [0, 0], 1);
+    player = new Player(50, 50, 100, 100, playerImg, [0, 20], 1);
 
     document.onkeypress = keyController.bind(null, player);
     // ctx.drawImage(backgroundImg["frame_000.png"], 0, 0);
