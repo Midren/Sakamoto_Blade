@@ -8,11 +8,11 @@ export class GameObject {
     }
 
     onCollision(other) {
-        
+
     }
 
-    render() {
-
+    render(ctx) {
+        ctx.drawImage(this.image, this.x, this.y, this.height, this.width)
     }
 
 }
@@ -24,7 +24,8 @@ export class MovableObject extends GameObject {
     }
 
     move() {
-
+        this.x += this.speed[0];
+        this.y += this.speed[1];
     }
 
     onCollision(other) {
