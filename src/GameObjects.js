@@ -24,13 +24,20 @@ export class MovableObject extends GameObject {
     }
 
     move() {
+        if (this.y + this.height >= 720 && this.speed[1] > 0) {
+            this.speed[1] = 0;
+        }
+        if((this.x + this.speed[0] < 0) || (this.speed[0] + this.x + this.width) > 1200 ) {
+            this.speed[0] = 0;
+        }
         this.x += this.speed[0];
         this.y += this.speed[1];
+
         if (this.speed[1] < 0) {
             this.speed = this.speed.map(val => Math.abs(val * 0.3) < 1 ? 0 : val * 0.7);
             this.speed[1] = this.speed[1] === 0 ? 15 : this.speed[1];
             if (this.speed[0]) {
-                this.speed[0] -= this.speed[1] * Math.cos(Math.PI / 4) * Math.abs(this.speed[0])/this.speed[0]
+                this.speed[0] -= this.speed[1] * Math.cos(Math.PI / 4) * Math.abs(this.speed[0]) / this.speed[0]
             }
         } else {
             this.speed[0] = Math.abs(this.speed[0] * 0.7) < 1 ? 0 : this.speed[0] * 0.7;
