@@ -1,4 +1,4 @@
-import {keyController} from "./Controller";
+import {keyHandler, keyController, KeyStatus} from "./Controller";
 import {Player} from "./Entity";
 
 const canvas = document.getElementById("field");
@@ -33,31 +33,29 @@ let playerImg = loadImgs("img/player/", playerImagesSrc);
 let blocksImg = loadImgs("img/blocks/", blocksImagesSrc);
 let backgroundImg = loadImgs("img/background/", backgroundImagesSrc);
 
-let player;
-
-const render = (playerImg, blocksImg, backgroundImg ) => {
+const render = (player, keyStatus, playerImg, blocksImg, backgroundImg) => {
     ctx.clearRect(0, 0, 1200, 720);
     ctx.drawImage(backgroundImg["frame_000.png"], 0, 0);
-    // ctx.drawImage(playerImg["0l.png"], 550, 240, 100, 80);
-    // ctx.drawImage(blocksImg["platform.png"], 550, 320, 100, 100);
+
+    keyHandler(keyStatus, player);
+    keyStatus.clear();
+
     player.move();
     player.render(ctx);
 
-    requestAnimationFrame(render.bind(null, playerImg, blocksImg, backgroundImg));
+    requestAnimationFrame(render.bind(null, player, keyStatus, playerImg, blocksImg, backgroundImg));
 };
 
 const startGame = (playerImg, blocksImg, backgroundImg) => {
     document.getElementById("loading_screen").style.display = "none";
     document.getElementById("field").style.display = "flex";
 
-    player = new Player(50, 50, 100, 100, playerImg, [0, 20], 1);
+    let player = new Player(50, 50, 100, 100, playerImg, [0, 0], 1);
+    let keyStatus = new KeyStatus();
 
-    document.onkeypress = keyController.bind(null, player);
-    // ctx.drawImage(backgroundImg["frame_000.png"], 0, 0);
-    // ctx.drawImage(playerImg["0l.png"], 550, 240, 100, 80);
-    // ctx.drawImage(blocksImg["platform.png"], 550, 320, 100, 100);
-    requestAnimationFrame(render.bind(null, playerImg, blocksImg, backgroundImg));
-    // render();
+    document.onkeypress = keyController.bind(null, keyStatus);
+
+    requestAnimationFrame(render.bind(null, player, keyStatus, playerImg, blocksImg, backgroundImg));
 };
 
 let socket = new WebSocket("ws://127.0.0.1:3000");
