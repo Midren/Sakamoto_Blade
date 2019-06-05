@@ -18,9 +18,7 @@ export class Player extends MovableObject {
 
     }
 
-    onCollision(other) {
-        // super.onCollision(other);
-    }
+
 
     hit() {
 

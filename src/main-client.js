@@ -1,9 +1,27 @@
 import {keyHandler, keyController, KeyStatus} from "./Controller";
+import {Player} from "./Entity";
+import {GameObject} from "./GameObjects";
 import {Bullet, Player} from "./Entity";
 
 const canvas = document.getElementById("field");
 const ctx = canvas.getContext("2d");
-
+// @formatter:off
+const fieldBlueprint=
+            "########################" +
+            "#..........##..........#" +
+            "##....................##" +
+            "#..........##..........#" +
+            "#..........##..........#" +
+            "######............######" +
+            "#......................#" +
+            "#......##......##......#" +
+            "#..........##..........#" +
+            "#..........##..........#" +
+            "#......................#" +
+            "#....##############....#" +
+            "#......................#" +
+            "########################";
+// @formatter:on
 const loadImgs = (path, imagesSrc) => new Promise((res, rej) => {
     let images = {};
 
@@ -33,38 +51,49 @@ let playerImg = loadImgs("img/player/", playerImagesSrc);
 let blocksImg = loadImgs("img/blocks/", blocksImagesSrc);
 let backgroundImg = loadImgs("img/background/", backgroundImagesSrc);
 
-let bullet;
-
-const render = (player, keyStatus, playerImg, blocksImg, backgroundImg) => {
-    ctx.clearRect(0, 0, 1200, 720);
-    ctx.drawImage(backgroundImg["frame_000.png"], 0, 0);
-
+const render = (field, movableObjects, keyStatus, playerImg, blocksImg, backgroundImg) => {
+    ctx.clearRect(0, 0, 1200, 750);
+    ctx.drawImage(backgroundImg["frame_000.png"], 0, 0, 1200, 750);
+    let player = movableObjects[0];
     if (keyHandler(keyStatus, player)) {
-        let x = player.x + (player.direction === -1 ? 0 : player.width);
         bullet = new Bullet(x, player.y + player.height / 2.5, 18, 5, blocksImg["lava.png"], [player.direction * 40, 0]);
+        let x = player.x + (player.direction === -1 ? 0 : player.width);
     }
 
     player.move();
     player.render(ctx);
+    field.forEach(block => block.render(ctx));
     if (bullet) {
         bullet.move();
         bullet.render(ctx);
     }
 
-    requestAnimationFrame(render.bind(null, player, keyStatus, playerImg, blocksImg, backgroundImg));
+    requestAnimationFrame(render.bind(null, field, movableObjects, keyStatus, playerImg, blocksImg, backgroundImg));
 };
 
 const startGame = (playerImg, blocksImg, backgroundImg) => {
+    let cell_size = 50;
+    let width = canvas.width;
     document.getElementById("loading_screen").style.display = "none";
     document.getElementById("field").style.display = "flex";
 
-    let player = new Player(50, 50, 75, 75, playerImg, [0, 0], 1);
+    let player = new Player(100, 100, 50, 50, playerImg, [0, 0], 1);
     let keyStatus = new KeyStatus();
+    let block = new GameObject(50, 50, 50, 50, blocksImg['platform.png']);
+    let movableObjects = [player];
+    let field = [];
+    fieldBlueprint.split('').forEach((val, ind) => {
+            val === "#" ?
+                field.push(
+                    new GameObject((ind % (width / cell_size)) * cell_size, Math.floor(ind / (width / cell_size)) * cell_size, 50, 50, blocksImg['platform.png']))
+                : null;
+        }
+    );
 
     document.onkeydown = keyController.bind(null, keyStatus, true);
     document.onkeyup = keyController.bind(null, keyStatus, false);
 
-    requestAnimationFrame(render.bind(null, player, keyStatus, playerImg, blocksImg, backgroundImg));
+    requestAnimationFrame(render.bind(null, field, movableObjects, keyStatus, playerImg, blocksImg, backgroundImg));
 };
 
 let socket = new WebSocket("ws://127.0.0.1:3000");
