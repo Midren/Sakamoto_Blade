@@ -29,9 +29,9 @@ export const keyHandler = (keyStatus, player) => {
 
     }
     if (keyStatus.shoot) {
-
+        return true;
     }
-
+    return false;
 };
 
 export const keyController = (keyHelper, bool, e) => {
@@ -52,7 +52,7 @@ export const keyController = (keyHelper, bool, e) => {
             keyHelper.hit = bool;
             break;
         case "j":
-            keyHelper.shot = bool;
+            keyHelper.shoot = bool;
             break;
     }
 };

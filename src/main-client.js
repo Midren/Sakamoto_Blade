@@ -1,5 +1,5 @@
 import {keyHandler, keyController, KeyStatus} from "./Controller";
-import {Player} from "./Entity";
+import {Bullet, Player} from "./Entity";
 
 const canvas = document.getElementById("field");
 const ctx = canvas.getContext("2d");
@@ -33,14 +33,23 @@ let playerImg = loadImgs("img/player/", playerImagesSrc);
 let blocksImg = loadImgs("img/blocks/", blocksImagesSrc);
 let backgroundImg = loadImgs("img/background/", backgroundImagesSrc);
 
+let bullet;
+
 const render = (player, keyStatus, playerImg, blocksImg, backgroundImg) => {
     ctx.clearRect(0, 0, 1200, 720);
     ctx.drawImage(backgroundImg["frame_000.png"], 0, 0);
 
-    keyHandler(keyStatus, player);
+    if (keyHandler(keyStatus, player)) {
+        let x = player.x + (player.direction === -1 ? 0 : player.width);
+        bullet = new Bullet(x, player.y + player.height / 2.5, 18, 5, blocksImg["lava.png"], [player.direction * 40, 0]);
+    }
 
     player.move();
     player.render(ctx);
+    if (bullet) {
+        bullet.move();
+        bullet.render(ctx);
+    }
 
     requestAnimationFrame(render.bind(null, player, keyStatus, playerImg, blocksImg, backgroundImg));
 };
@@ -49,7 +58,7 @@ const startGame = (playerImg, blocksImg, backgroundImg) => {
     document.getElementById("loading_screen").style.display = "none";
     document.getElementById("field").style.display = "flex";
 
-    let player = new Player(50, 50, 100, 100, playerImg, [0, 0], 1);
+    let player = new Player(50, 50, 75, 75, playerImg, [0, 0], 1);
     let keyStatus = new KeyStatus();
 
     document.onkeydown = keyController.bind(null, keyStatus, true);

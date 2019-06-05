@@ -43,6 +43,10 @@ export class Player extends MovableObject {
 }
 
 export class Bullet extends MovableObject {
+    move() {
+        this.x += this.speed[0];
+    }
+
     onCollision(other) {
         // super.onCollision(other);
     }
