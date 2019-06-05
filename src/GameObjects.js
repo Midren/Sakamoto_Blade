@@ -24,10 +24,9 @@ export class MovableObject extends GameObject {
     }
 
     move() {
-        if (this.y + this.height >= 720 && this.speed[1] > 0) {
+        if (this.y + this.height >= 720 && this.speed[1] > 0)
             this.speed[1] = 0;
-        }
-        if((this.x + this.speed[0] < 0) || (this.speed[0] + this.x + this.width) > 1200 ) {
+        if ((this.x + this.speed[0] < 0) || (this.speed[0] + this.x + this.width) > 1200) {
             this.speed[0] = 0;
         }
         this.x += this.speed[0];
@@ -43,6 +42,8 @@ export class MovableObject extends GameObject {
             this.speed[0] = Math.abs(this.speed[0] * 0.7) < 1 ? 0 : this.speed[0] * 0.7;
             this.speed[1] = 15;
         }
+        if (this.y + this.height >= 720 && this.speed[1] > 0)
+            this.speed[1] = 0;
     }
 
     onCollision(other) {

@@ -38,7 +38,6 @@ const render = (player, keyStatus, playerImg, blocksImg, backgroundImg) => {
     ctx.drawImage(backgroundImg["frame_000.png"], 0, 0);
 
     keyHandler(keyStatus, player);
-    keyStatus.clear();
 
     player.move();
     player.render(ctx);
@@ -53,7 +52,8 @@ const startGame = (playerImg, blocksImg, backgroundImg) => {
     let player = new Player(50, 50, 100, 100, playerImg, [0, 0], 1);
     let keyStatus = new KeyStatus();
 
-    document.onkeypress = keyController.bind(null, keyStatus);
+    document.onkeydown = keyController.bind(null, keyStatus, true);
+    document.onkeyup = keyController.bind(null, keyStatus, false);
 
     requestAnimationFrame(render.bind(null, player, keyStatus, playerImg, blocksImg, backgroundImg));
 };

@@ -22,7 +22,8 @@ export const keyHandler = (keyStatus, player) => {
         player.direction = 1;
     }
     if (keyStatus.up) {
-        player.speed[1] = -30;
+        if (player.speed[1] === 0)
+            player.speed[1] = -30;
     }
     if (keyStatus.hit) {
 
@@ -33,25 +34,25 @@ export const keyHandler = (keyStatus, player) => {
 
 };
 
-export const keyController = (keyHelper, e) => {
+export const keyController = (keyHelper, bool, e) => {
     switch (e.key) {
         case "a":
         case "ArrowLeft":
-            keyHelper.left = true;
+            keyHelper.left = bool;
             break;
         case "d":
         case "ArrowRight":
-            keyHelper.right = true;
+            keyHelper.right = bool;
             break;
         case "w":
         case "ArrowUp":
-            keyHelper.up = true;
+            keyHelper.up = bool;
             break;
         case "k":
-            keyHelper.hit = true;
+            keyHelper.hit = bool;
             break;
         case "j":
-            keyHelper.shot = true;
+            keyHelper.shot = bool;
             break;
     }
 };
