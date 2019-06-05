@@ -7,10 +7,16 @@ export class GameObject {
         this.image = image;
     }
 
-    onCollision(other) {
-
+    isCollision(other) {
+        if (this.x < other.x + other.width &&
+            this.x + this.width > other.x &&
+            this.y < other.y + other.height &&
+            this.y + this.height > other.y) {
+            // collision detected!
+            return true;
+        }
+        return false;
     }
-
     render(ctx) {
         ctx.drawImage(this.image, this.x, this.y, this.height, this.width)
     }
@@ -47,7 +53,7 @@ export class MovableObject extends GameObject {
     }
 
     onCollision(other) {
-        // super.onCollision(other);
+        this.isCollision(other) ? this.y = other.y-this.height: null;
     }
 
 }
