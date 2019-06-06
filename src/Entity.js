@@ -1,8 +1,9 @@
 import {MovableObject} from "./GameObjects";
 
 export class Player extends MovableObject {
-    constructor(x, y, height, width, images, speed, direction) {
+    constructor(id, x, y, height, width, images, speed, direction) {
         super(x, y, height, width, images["0l.png"], speed);
+        this.id = id;
         this.images = images;
         this.direction = direction;
         this.tmp = 10;
