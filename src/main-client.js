@@ -55,6 +55,7 @@ const render = (field, movableObjects, keyStatus, playerImg, blocksImg, backgrou
     // movableObjects.forEach(obj => obj.move());
 
     field.forEach(block => block.render(ctx));
+    console.log(movableObjects);
     movableObjects.forEach(obj => obj.render(ctx));
 
     requestAnimationFrame(render.bind(null, field, movableObjects, keyStatus, playerImg, blocksImg, background));

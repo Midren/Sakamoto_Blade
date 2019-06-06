@@ -2,8 +2,7 @@ import {MovableObject} from "./GameObjects";
 
 export class Player extends MovableObject {
     constructor(id, x, y, height, width, images, speed, direction) {
-        super(x, y, height, width, images["0l.png"], speed);
-        this.id = id;
+        super(id,x, y, height, width, images["0l.png"], speed);
         this.images = images;
         this.direction = direction;
         this.tmp = 10;
@@ -15,15 +14,7 @@ export class Player extends MovableObject {
         this.speed[0] *= this.direction;
     }
 
-    jump() {
-
-    }
-
     hit() {
-
-    }
-
-    shoot() {
 
     }
 

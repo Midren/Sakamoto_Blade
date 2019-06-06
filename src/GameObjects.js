@@ -73,8 +73,9 @@ export class GameObject {
 }
 
 export class MovableObject extends GameObject {
-    constructor(x, y, height, width, image, speed) {
+    constructor(id, x, y, height, width, image, speed) {
         super(x, y, height, width, image);
+        this.id = id;
         this.speed = speed;
         this.onGround = false;
     }
