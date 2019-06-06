@@ -55,7 +55,6 @@ const render = (field, movableObjects, keyStatus, playerImg, blocksImg, backgrou
     // movableObjects.forEach(obj => obj.move());
 
     field.forEach(block => block.render(ctx));
-    console.log(movableObjects);
     movableObjects.forEach(obj => obj.render(ctx));
 
     requestAnimationFrame(render.bind(null, field, movableObjects, keyStatus, playerImg, blocksImg, background));
@@ -96,11 +95,15 @@ const startGame = (playerImg, blocksImg, backgroundImg, soundtrack) => {
     socket.addEventListener('message', (event) => {
         let entity = JSON.parse(event.data);
         movableObjects.length = 0;
-        if (entity.id) {
-            movableObjects.push(new Player(0, entity.x, entity.y, 50, 50, playerImg, [0, 0], entity.direction));
-        } else {
-            movableObjects.push(new Bullet(entity.x, entity.y, 18, 5, blocksImg["lava.png"], [entity.direction * 40, 0]));
-        }
+        entity.forEach(entity => {
+            if (entity) {
+                if (entity.id) {
+                    movableObjects.push(new Player(0, entity.x, entity.y, 50, 50, playerImg, [1, 0], entity.direction));
+                } else {
+                    movableObjects.push(new Bullet(0, entity.x, entity.y, 18, 5, blocksImg["lava.png"], [entity.direction * 40, 0]));
+                }
+            }
+        });
     });
 
     requestAnimationFrame(render.bind(null, field, movableObjects, keyStatus, playerImg, blocksImg, background));
