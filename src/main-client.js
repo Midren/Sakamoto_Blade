@@ -18,7 +18,7 @@ const fieldBlueprint =
     "#.........####.........#" +
     "#......................#" +
     "#....##############....#" +
-    "#......................#" +
+    "##....................##" +
     "########################";
 // @formatter:on
 const loadImgs = (path, imagesSrc) => new Promise((res, rej) => {
@@ -64,9 +64,9 @@ const render = (field, movableObjects, keyStatus, playerImg, blocksImg, backgrou
         player.onGround = false;
     }
 
+    field.forEach(block => block.render(ctx));
     player.move();
     player.render(ctx);
-    field.forEach(block => block.render(ctx));
     if (bullet) {
         bullet.move();
         bullet.render(ctx);
