@@ -15,7 +15,7 @@ const fieldBlueprint =
     "#......................#" +
     "#......##......##......#" +
     "#..........##..........#" +
-    "#..........##..........#" +
+    "#.........####.........#" +
     "#......................#" +
     "#....##############....#" +
     "#......................#" +
@@ -81,7 +81,7 @@ const startGame = (playerImg, blocksImg, backgroundImg) => {
     document.getElementById("loading_screen").style.display = "none";
     document.getElementById("field").style.display = "flex";
 
-    let player = new Player(100, 100, 50, 50, playerImg, [0, 0], 1);
+    let player = new Player(120, 180, 50, 50, playerImg, [0, 0], 1);
     let keyStatus = new KeyStatus();
     let block = new GameObject(50, 50, 50, 50, blocksImg['platform.png']);
     let movableObjects = [player];
