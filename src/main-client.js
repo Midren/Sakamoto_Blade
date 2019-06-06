@@ -1,4 +1,4 @@
-import {keyController, keyHandler, KeyStatus} from "./Controller";
+import {keyController, keyHandler} from "./Controller";
 import {GameObject} from "./GameObjects";
 import {Bullet, Player} from "./Entity";
 import {playTrack, getSong} from "./music";
@@ -57,21 +57,22 @@ const render = (field, movableObjects, keyStatus, playerImg, blocksImg, backgrou
     ctx.clearRect(0, 0, 1200, 750);
     ctx.drawImage(background["image"], 0, 0, 1200, 750);
 
-    let player = movableObjects[0];
+    // let player = movableObjects[0];
 
-    if (keyHandler(keyStatus, player)) {
-        let x = player.x + (player.direction === -1 ? 0 : player.width);
-        movableObjects.push(new Bullet(x, player.y + player.height / 2.5, 18, 5, blocksImg["lava.png"], [player.direction * 40, 0]));
-    }
-    if (!field.some(val => player.onCollision(val))) {
-        player.onGround = false;
-    }
+    socket.send(JSON.stringify(keyStatus));
 
-    movableObjects.forEach(obj => obj.move());
+    // if (keyHandler(keyStatus, player)) {
+    //     let x = player.x + (player.direction === -1 ? 0 : player.width);
+    //     movableObjects.push(new Bullet(x, player.y + player.height / 2.5, 18, 5, blocksImg["lava.png"], [player.direction * 40, 0]));
+    // }
+    // if (!field.some(val => player.onCollision(val))) {
+    //     player.onGround = false;
+    // }
+    //
+    // movableObjects.forEach(obj => obj.move());
 
     field.forEach(block => block.render(ctx));
     movableObjects.forEach(obj => obj.render(ctx));
-    socket.send(JSON.stringify({"x": 3, "y": 2}));
 
     requestAnimationFrame(render.bind(null, field, movableObjects, keyStatus, playerImg, blocksImg, background));
 };
@@ -83,7 +84,8 @@ const startGame = (playerImg, blocksImg, backgroundImg, soundtrack) => {
     document.getElementById("field").style.display = "flex";
 
     let player = new Player(0, 120, 180, 50, 50, playerImg, [0, 0], 1);
-    let keyStatus = new KeyStatus();
+    let keyStatus = {"left": false, "right": false, "up": false, "hit": false, "shoot": false};
+
     let movableObjects = [player];
     let field = [];
     fieldBlueprint.split('').forEach((val, ind) => {
@@ -106,6 +108,17 @@ const startGame = (playerImg, blocksImg, backgroundImg, soundtrack) => {
     }).bind(null, ctx, backgroundImg, num), 100);
 
     playTrack(audioCtx, soundtrack);
+
+    socket.addEventListener('message', (event) => {
+        let entity = JSON.parse(event.data);
+        movableObjects.length = 0;
+        if (entity.id) {
+            movableObjects.push(new Player(0, entity.x, entity.y, 50, 50, playerImg, [0, 0], entity.direction));
+        } else {
+            movableObjects.push(new Bullet(entity.x, entity.y, 18, 5, blocksImg["lava.png"], [entity.direction * 40, 0]));
+        }
+    });
+
     requestAnimationFrame(render.bind(null, field, movableObjects, keyStatus, playerImg, blocksImg, background));
 };
 
@@ -119,7 +132,4 @@ socket.addEventListener('open', event => {
             startGame.bind(null, ...values)());
 });
 
-socket.addEventListener('message', (event) => {
-    console.log("Get data ", event.data);
-});
 

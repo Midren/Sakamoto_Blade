@@ -30,6 +30,7 @@ wsServer.on("connection", (ws, req) => {
             console.log(message.binaryData);
         } else {
             console.log(JSON.parse(message));
+            ws.send(JSON.stringify({"id": 1, "x": 123, "y": 103}))
         }
     });
 

@@ -1,17 +1,3 @@
-export class KeyStatus {
-    constructor() {
-        this.clear();
-    }
-
-    clear() {
-        this.left = false;
-        this.right = false;
-        this.up = false;
-        this.hit = false;
-        this.shoot = false;
-    }
-}
-
 export const keyHandler = (keyStatus, player) => {
     if (keyStatus.left) {
         player.speed[0] += 2.5;
