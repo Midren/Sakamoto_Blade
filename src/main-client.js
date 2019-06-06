@@ -40,19 +40,8 @@ const render = (field, movableObjects, keyStatus, playerImg, blocksImg, backgrou
     ctx.clearRect(0, 0, 1200, 750);
     ctx.drawImage(background["image"], 0, 0, 1200, 750);
 
-    // let player = movableObjects[0];
-
     socket.send(JSON.stringify(keyStatus));
-
-    // if (keyHandler(keyStatus, player)) {
-    //     let x = player.x + (player.direction === -1 ? 0 : player.width);
-    //     movableObjects.push(new Bullet(x, player.y + player.height / 2.5, 18, 5, blocksImg["lava.png"], [player.direction * 40, 0]));
-    // }
-    // if (!field.some(val => player.onCollision(val))) {
-    //     player.onGround = false;
-    // }
-    //
-    // movableObjects.forEach(obj => obj.move());
+    keyStatus.shoot = false;
 
     field.forEach(block => block.render(ctx));
     movableObjects.forEach(obj => obj.render(ctx));

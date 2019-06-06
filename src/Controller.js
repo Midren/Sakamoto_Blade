@@ -23,6 +23,9 @@ export const keyHandler = (keyStatus, player) => {
     return false;
 };
 
+let can_shoot = {"is_allowed": true};
+const allowShoot = can_shoot => can_shoot.is_allowed = true;
+
 export const keyController = (keyHelper, bool, e) => {
     switch (e.key) {
         case "a":
@@ -41,7 +44,13 @@ export const keyController = (keyHelper, bool, e) => {
             keyHelper.hit = bool;
             break;
         case "j":
-            keyHelper.shoot = bool;
+            if (can_shoot.is_allowed && bool === true) {
+                keyHelper.shoot = bool;
+                can_shoot.is_allowed = false;
+                setTimeout(allowShoot.bind(null, can_shoot), 500);
+            } else {
+                keyHelper.shoot = false;
+            }
             break;
     }
 };
