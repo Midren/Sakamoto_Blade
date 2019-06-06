@@ -1,8 +1,10 @@
-import {keyHandler, keyController, KeyStatus} from "./Controller";
+import {keyController, keyHandler, KeyStatus} from "./Controller";
 import {GameObject} from "./GameObjects";
 import {Bullet, Player} from "./Entity";
+import {playTrack, getSong} from "./music";
 
 const canvas = document.getElementById("field");
+const audioCtx = new AudioContext();
 const ctx = canvas.getContext("2d");
 // @formatter:off
 const fieldBlueprint =
@@ -49,6 +51,7 @@ let backgroundImagesSrc = Array(171).fill(0).map((val, i) =>
 let playerImg = loadImgs("img/player/", playerImagesSrc);
 let blocksImg = loadImgs("img/blocks/", blocksImagesSrc);
 let backgroundImg = loadImgs("img/background/", backgroundImagesSrc);
+let soundtrack = getSong(audioCtx, "music/MOON_Hydrogen.ogg");
 
 let bullet;
 
@@ -75,7 +78,7 @@ const render = (field, movableObjects, keyStatus, playerImg, blocksImg, backgrou
     requestAnimationFrame(render.bind(null, field, movableObjects, keyStatus, playerImg, blocksImg, background));
 };
 
-const startGame = (playerImg, blocksImg, backgroundImg) => {
+const startGame = (playerImg, blocksImg, backgroundImg, soundtrack) => {
     let cell_size = 50;
     let width = canvas.width;
     document.getElementById("loading_screen").style.display = "none";
@@ -104,6 +107,7 @@ const startGame = (playerImg, blocksImg, backgroundImg) => {
         num["num"] = (++num["num"]) % Object.keys(backgroundImg).length;
     }).bind(null, ctx, backgroundImg, num), 100);
 
+    playTrack(audioCtx, soundtrack);
     requestAnimationFrame(render.bind(null, field, movableObjects, keyStatus, playerImg, blocksImg, background));
 };
 
@@ -112,7 +116,7 @@ let socket = new WebSocket("ws://127.0.0.1:3000");
 socket.addEventListener('open', event => {
     console.log("Connected");
 
-    Promise.all([playerImg, blocksImg, backgroundImg])
+    Promise.all([playerImg, blocksImg, backgroundImg, soundtrack])
         .then(values =>
             startGame.bind(null, ...values)());
 });
