@@ -53,6 +53,9 @@ export class GameObject {
                 "4": {"x": other.x + other.width, "y": other.y + other.height}
             }
         };
+        if (s == 2 && this.speed[1] < 0) {
+            return s;
+        }
         // console.log(other.x, other.y);
         if (Math.pow(new_other[s][t].x - new_this[s][t].x, 2) >= Math.pow(new_other[s][t].y - new_this[s][t].y, 2)) {
             // console.log(s);
@@ -109,7 +112,7 @@ export class MovableObject extends GameObject {
                 return true;
             case 2:
                 this.onGround = false;
-                this.y = other.y + other.height + 2;
+                this.y = other.y + other.height + 1;
                 return true;
             case 3:
                 this.x = other.x - this.width - 10;
@@ -120,10 +123,6 @@ export class MovableObject extends GameObject {
             case 0:
                 break;
         }
-        // if (this.isCollision(other)) {
-        //     this.onGround = true;
-        //     return true;
-        // }
         return false;
     }
 }

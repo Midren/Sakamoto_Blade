@@ -69,8 +69,9 @@ const render = (field, movableObjects, keyStatus, playerImg, blocksImg, backgrou
 
     movableObjects.forEach(obj => obj.move());
 
-    movableObjects.forEach(obj => obj.render(ctx));
     field.forEach(block => block.render(ctx));
+    movableObjects.forEach(obj => obj.render(ctx));
+    socket.send("hello");
 
     requestAnimationFrame(render.bind(null, field, movableObjects, keyStatus, playerImg, blocksImg, background));
 };
