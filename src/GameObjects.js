@@ -8,14 +8,59 @@ export class GameObject {
     }
 
     isCollision(other) {
-        if (this.x < other.x + other.width &&
-            this.x + this.width > other.x &&
-            this.y < other.y + other.height &&
-            this.y + this.height > other.y) {
-            // collision detected!
-            return true;
+        // 1 - up
+        // 2 - down
+        // 3 - right
+        //4 - left
+        let s = 0, t = 0;
+        if (this.y + this.height >= other.y && this.y <= other.y + other.height) {
+            if (this.x <= other.x && this.x + this.width >= other.x) {
+                t = 3;
+            }
+            if (this.x >= other.x && this.x <= other.x + other.width) {
+                t = 4;
+            }
         }
-        return false;
+        if (this.x + this.width >= other.x && this.x <= other.x + other.width) {
+            if (this.y <= other.y && this.y + this.height >= other.y) {
+                s = 1;
+            }
+            if (this.y <= other.y + other.height && this.y >= other.y) {
+                s = 2;
+            }
+        }
+        if (!s)
+            return t;
+        let new_this = {
+            "1": {
+                "3": {"x": this.x + this.width, "y": this.y + this.height},
+                "4": {"x": this.x, "y": this.y + this.height}
+            },
+            "2": {
+                "3": {"x": this.x + this.width, "y": this.y},
+                "4": {"x": this.x, "y": this.y}
+            }
+        };
+        let new_other = {
+            "1": {
+                "3": {"x": other.x, "y": other.y},
+                "4": {"x": other.x + other.width, "y": other.y}
+            },
+            "2": {
+                "3": {"x": other.x, "y": other.y + other.height},
+                "4": {"x": other.x + other.width, "y": other.y + other.height}
+            }
+        };
+        if(s*t){
+            console.log(s,t);
+        }
+        if (Math.abs(new_other[s][t].x - new_this[s][t].x) > Math.abs(new_other[s][t].y - new_this[s][t].y)) {
+            console.log(s);
+            return s;
+        } else {
+            console.log(t);
+            return t;
+        }
     }
 
     render(ctx) {
@@ -56,10 +101,29 @@ export class MovableObject extends GameObject {
     }
 
     onCollision(other) {
-        if (this.isCollision(other)) {
-            this.onGround = true;
-            return true;
+        let side = this.isCollision(other);
+        switch (side) {
+            case 1:
+                this.onGround = true;
+                this.y = other.y - this.height + 1;
+                return true;
+            case 2:
+                this.y = other.y + other.height + 1;
+                this.onGround = false;
+                return true;
+            case 3:
+                this.x = other.x - this.width - 1;
+                return true;
+            case 4:
+                this.x = other.x + other.width + 1;
+                return true;
+            case 0:
+                break;
         }
+        // if (this.isCollision(other)) {
+        //     this.onGround = true;
+        //     return true;
+        // }
         return false;
     }
 }
