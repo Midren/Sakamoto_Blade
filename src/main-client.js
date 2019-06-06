@@ -53,27 +53,24 @@ let blocksImg = loadImgs("img/blocks/", blocksImagesSrc);
 let backgroundImg = loadImgs("img/background/", backgroundImagesSrc);
 let soundtrack = getSong(audioCtx, "music/MOON_Hydrogen.ogg");
 
-let bullet;
-
 const render = (field, movableObjects, keyStatus, playerImg, blocksImg, background) => {
     ctx.clearRect(0, 0, 1200, 750);
     ctx.drawImage(background["image"], 0, 0, 1200, 750);
+
     let player = movableObjects[0];
+
     if (keyHandler(keyStatus, player)) {
         let x = player.x + (player.direction === -1 ? 0 : player.width);
-        bullet = new Bullet(x, player.y + player.height / 2.5, 18, 5, blocksImg["lava.png"], [player.direction * 40, 0]);
+        movableObjects.push(new Bullet(x, player.y + player.height / 2.5, 18, 5, blocksImg["lava.png"], [player.direction * 40, 0]));
     }
     if (!field.some(val => player.onCollision(val))) {
         player.onGround = false;
     }
 
-    player.move();
-    player.render(ctx);
+    movableObjects.forEach(obj => obj.move());
+
+    movableObjects.forEach(obj => obj.render(ctx));
     field.forEach(block => block.render(ctx));
-    if (bullet) {
-        bullet.move();
-        bullet.render(ctx);
-    }
 
     requestAnimationFrame(render.bind(null, field, movableObjects, keyStatus, playerImg, blocksImg, background));
 };

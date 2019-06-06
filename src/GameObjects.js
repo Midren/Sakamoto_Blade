@@ -51,8 +51,8 @@ export class GameObject {
                 "4": {"x": other.x + other.width, "y": other.y + other.height}
             }
         };
-        if(s*t){
-            console.log(s,t);
+        if (s * t) {
+            console.log(s, t);
         }
         if (Math.abs(new_other[s][t].x - new_this[s][t].x) > Math.abs(new_other[s][t].y - new_this[s][t].y)) {
             console.log(s);
@@ -89,14 +89,14 @@ export class MovableObject extends GameObject {
 
         if (this.speed[1] < 0) {
             this.speed = this.speed.map(val => Math.abs(val * 0.3) < 1 ? 0 : val * 0.7);
-            this.speed[1] = this.speed[1] === 0 ? 15 : this.speed[1];
+            if (!this.speed[1].onGround)
+                this.speed[1] = this.speed[1] === 0 ? 15 : this.speed[1];
         } else {
             this.speed[0] = Math.abs(this.speed[0] * 0.7) < 1 ? 0 : this.speed[0] * 0.7;
-            this.speed[1] = 15;
+            if (!this.speed[1].onGround)
+                this.speed[1] = 15;
         }
         if (this.y + this.height >= 720 && this.speed[1] > 0)
-            this.speed[1] = 0;
-        if (this.onGround && this.speed[1] > 0)
             this.speed[1] = 0;
     }
 

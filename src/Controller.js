@@ -31,6 +31,7 @@ export const keyHandler = (keyStatus, player) => {
 
     }
     if (keyStatus.shoot) {
+        keyStatus.shoot = false;
         return true;
     }
     return false;
