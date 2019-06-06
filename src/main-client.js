@@ -2,27 +2,11 @@ import {keyController, keyHandler, KeyStatus} from "./Controller";
 import {GameObject} from "./GameObjects";
 import {Bullet, Player} from "./Entity";
 import {playTrack, getSong} from "./music";
+import {fieldBlueprint} from "./field";
 
 const canvas = document.getElementById("field");
 const audioCtx = new AudioContext();
 const ctx = canvas.getContext("2d");
-// @formatter:off
-const fieldBlueprint =
-    "########################" +
-    "#..........##..........#" +
-    "##....................##" +
-    "#..........##..........#" +
-    "#..........##..........#" +
-    "######............######" +
-    "#......................#" +
-    "#......##......##......#" +
-    "#..........##..........#" +
-    "#.........####.........#" +
-    "#......................#" +
-    "#....##############....#" +
-    "##....................##" +
-    "########################";
-// @formatter:on
 const loadImgs = (path, imagesSrc) => new Promise((res, rej) => {
     let images = {};
 
@@ -38,7 +22,6 @@ const loadImgs = (path, imagesSrc) => new Promise((res, rej) => {
         img.src = path + val;
     });
 });
-
 let playerImagesSrc = ["0l.png", "atkL2.png", "atkR3.png", "l1.png", "l5.png", "r2.png", "r6.png", "0.png",
     "atkL3.png", "jl.png", "l2.png", "l6.png", "r3.png", "0r.png", "atkR1.png", "j.png", "l3.png",
     "Pistol.png", "r4.png", "atkL1.png", "atkR2.png", "jr.png", "l4.png", "r1.png", "r5.png"];
