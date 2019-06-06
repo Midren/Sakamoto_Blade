@@ -52,15 +52,15 @@ let backgroundImg = loadImgs("img/background/", backgroundImagesSrc);
 
 let bullet;
 
-const render = (field, movableObjects, keyStatus, playerImg, blocksImg, backgroundImg) => {
+const render = (field, movableObjects, keyStatus, playerImg, blocksImg, background) => {
     ctx.clearRect(0, 0, 1200, 750);
-    ctx.drawImage(backgroundImg["frame_000.png"], 0, 0, 1200, 750);
+    ctx.drawImage(background["image"], 0, 0, 1200, 750);
     let player = movableObjects[0];
     if (keyHandler(keyStatus, player)) {
         let x = player.x + (player.direction === -1 ? 0 : player.width);
         bullet = new Bullet(x, player.y + player.height / 2.5, 18, 5, blocksImg["lava.png"], [player.direction * 40, 0]);
     }
-    if(!field.some(val => player.onCollision(val))) {
+    if (!field.some(val => player.onCollision(val))) {
         player.onGround = false;
     }
 
@@ -72,7 +72,7 @@ const render = (field, movableObjects, keyStatus, playerImg, blocksImg, backgrou
         bullet.render(ctx);
     }
 
-    requestAnimationFrame(render.bind(null, field, movableObjects, keyStatus, playerImg, blocksImg, backgroundImg));
+    requestAnimationFrame(render.bind(null, field, movableObjects, keyStatus, playerImg, blocksImg, background));
 };
 
 const startGame = (playerImg, blocksImg, backgroundImg) => {
@@ -83,7 +83,6 @@ const startGame = (playerImg, blocksImg, backgroundImg) => {
 
     let player = new Player(100, 100, 50, 50, playerImg, [0, 0], 1);
     let keyStatus = new KeyStatus();
-    let block = new GameObject(50, 50, 50, 50, blocksImg['platform.png']);
     let movableObjects = [player];
     let field = [];
     fieldBlueprint.split('').forEach((val, ind) => {
@@ -97,7 +96,15 @@ const startGame = (playerImg, blocksImg, backgroundImg) => {
     document.onkeydown = keyController.bind(null, keyStatus, true);
     document.onkeyup = keyController.bind(null, keyStatus, false);
 
-    requestAnimationFrame(render.bind(null, field, movableObjects, keyStatus, playerImg, blocksImg, backgroundImg));
+    let background = {"image": backgroundImg["frame_000.png"]};
+    let num = {"num": 0};
+
+    setInterval(((ctx, backgroundImg, num) => {
+        background["image"] = backgroundImg["frame_" + num["num"].toString().padStart(3, "0") + ".png"];
+        num["num"] = (++num["num"]) % Object.keys(backgroundImg).length;
+    }).bind(null, ctx, backgroundImg, num), 100);
+
+    requestAnimationFrame(render.bind(null, field, movableObjects, keyStatus, playerImg, blocksImg, background));
 };
 
 let socket = new WebSocket("ws://127.0.0.1:3000");
