@@ -22,8 +22,10 @@ export const keyHandler = (keyStatus, player) => {
         player.direction = 1;
     }
     if (keyStatus.up) {
-        if (player.speed[1] === 0)
+        if (player.onGround) {
             player.speed[1] = -30;
+            player.onGround = false;
+        }
     }
     if (keyStatus.hit) {
 

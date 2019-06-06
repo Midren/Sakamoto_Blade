@@ -18,8 +18,6 @@ export class Player extends MovableObject {
 
     }
 
-
-
     hit() {
 
     }

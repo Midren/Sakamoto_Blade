@@ -17,6 +17,7 @@ export class GameObject {
         }
         return false;
     }
+
     render(ctx) {
         ctx.drawImage(this.image, this.x, this.y, this.height, this.width)
     }
@@ -27,9 +28,12 @@ export class MovableObject extends GameObject {
     constructor(x, y, height, width, image, speed) {
         super(x, y, height, width, image);
         this.speed = speed;
+        this.onGround = false;
     }
 
     move() {
+        if (this.onGround && this.speed[1] > 0)
+            this.speed[1] = 0;
         if (this.y + this.height >= 720 && this.speed[1] > 0)
             this.speed[1] = 0;
         if ((this.x + this.speed[0] < 0) || (this.speed[0] + this.x + this.width) > 1200) {
@@ -47,10 +51,15 @@ export class MovableObject extends GameObject {
         }
         if (this.y + this.height >= 720 && this.speed[1] > 0)
             this.speed[1] = 0;
+        if (this.onGround && this.speed[1] > 0)
+            this.speed[1] = 0;
     }
 
     onCollision(other) {
-        this.isCollision(other) ? this.y = other.y-this.height: null;
+        if (this.isCollision(other)) {
+            this.onGround = true;
+            return true;
+        }
+        return false;
     }
-
 }

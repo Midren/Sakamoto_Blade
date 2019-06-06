@@ -1,26 +1,25 @@
 import {keyHandler, keyController, KeyStatus} from "./Controller";
-import {Player} from "./Entity";
 import {GameObject} from "./GameObjects";
 import {Bullet, Player} from "./Entity";
 
 const canvas = document.getElementById("field");
 const ctx = canvas.getContext("2d");
 // @formatter:off
-const fieldBlueprint=
-            "########################" +
-            "#..........##..........#" +
-            "##....................##" +
-            "#..........##..........#" +
-            "#..........##..........#" +
-            "######............######" +
-            "#......................#" +
-            "#......##......##......#" +
-            "#..........##..........#" +
-            "#..........##..........#" +
-            "#......................#" +
-            "#....##############....#" +
-            "#......................#" +
-            "########################";
+const fieldBlueprint =
+    "########################" +
+    "#..........##..........#" +
+    "##....................##" +
+    "#..........##..........#" +
+    "#..........##..........#" +
+    "######............######" +
+    "#......................#" +
+    "#......##......##......#" +
+    "#..........##..........#" +
+    "#..........##..........#" +
+    "#......................#" +
+    "#....##############....#" +
+    "#......................#" +
+    "########################";
 // @formatter:on
 const loadImgs = (path, imagesSrc) => new Promise((res, rej) => {
     let images = {};
@@ -51,13 +50,18 @@ let playerImg = loadImgs("img/player/", playerImagesSrc);
 let blocksImg = loadImgs("img/blocks/", blocksImagesSrc);
 let backgroundImg = loadImgs("img/background/", backgroundImagesSrc);
 
+let bullet;
+
 const render = (field, movableObjects, keyStatus, playerImg, blocksImg, backgroundImg) => {
     ctx.clearRect(0, 0, 1200, 750);
     ctx.drawImage(backgroundImg["frame_000.png"], 0, 0, 1200, 750);
     let player = movableObjects[0];
     if (keyHandler(keyStatus, player)) {
-        bullet = new Bullet(x, player.y + player.height / 2.5, 18, 5, blocksImg["lava.png"], [player.direction * 40, 0]);
         let x = player.x + (player.direction === -1 ? 0 : player.width);
+        bullet = new Bullet(x, player.y + player.height / 2.5, 18, 5, blocksImg["lava.png"], [player.direction * 40, 0]);
+    }
+    if(!field.some(val => player.onCollision(val))) {
+        player.onGround = false;
     }
 
     player.move();
