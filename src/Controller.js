@@ -14,11 +14,11 @@ export class KeyStatus {
 
 export const keyHandler = (keyStatus, player) => {
     if (keyStatus.left) {
-        player.speed[0] += 5;
+        player.speed[0] += 2.5;
         player.direction = -1;
     }
     if (keyStatus.right) {
-        player.speed[0] += 5;
+        player.speed[0] += 2.5;
         player.direction = 1;
     }
     if (keyStatus.up) {
