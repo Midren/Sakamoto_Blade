@@ -39,7 +39,9 @@ wsServer.on("connection", (ws, req) => {
     let player = players[ws.id - 1];
     if (!player) return;
     if (keyHandler(JSON.parse(message), player)) {
-      let x = player.coordinates.x + (player.direction === -1 ? -5 : player.size.width);
+      let x =
+        player.coordinates.x +
+        (player.direction === -1 ? -5 : player.size.width);
       movableObjects.push(
         new Bullet(
           0,

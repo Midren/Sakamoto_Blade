@@ -14,7 +14,7 @@ export class GameObject {
     let isVerticalCollision = 0,
       isHorizontalCollision = 0;
     if (
-      this.coordinates.x + this.size.height > other.coordinates.y &&
+      this.coordinates.y + this.size.height > other.coordinates.y &&
       this.coordinates.y < other.coordinates.y + other.size.height
     ) {
       if (
@@ -87,20 +87,18 @@ export class GameObject {
         }
       }
     };
-    console.log(new_this);
-    console.log(new_other);
-    if (isVerticalCollision === DOWN && this.speed[UP] < 0) {
+    if (isVerticalCollision === DOWN && this.speed[1] < 0) {
       return isVerticalCollision;
     }
     return Math.pow(
       new_other[isVerticalCollision][isHorizontalCollision].x -
         new_this[isVerticalCollision][isHorizontalCollision].x,
-      DOWN
+      2
     ) >=
       Math.pow(
         new_other[isVerticalCollision][isHorizontalCollision].y -
           new_this[isVerticalCollision][isHorizontalCollision].y,
-        DOWN
+        2
       )
       ? isVerticalCollision
       : isHorizontalCollision;
