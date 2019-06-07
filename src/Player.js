@@ -9,9 +9,9 @@ export class Player extends MovableObject {
   }
 
   move() {
-    this.speed[0] *= this.direction;
+    this.speed.x *= this.direction;
     super.move();
-    this.speed[0] *= this.direction;
+    this.speed.x *= this.direction;
   }
 
   render(ctx) {
@@ -22,9 +22,9 @@ export class Player extends MovableObject {
       this.coordinates.x,
       this.coordinates.y
     );
-    if (this.direction === -1 && this.speed[0]) {
+    if (this.direction === -1 && this.speed.x) {
       this.image = this.images["img/player/l1.png"];
-    } else if (this.direction === 1 && this.speed[0]) {
+    } else if (this.direction === 1 && this.speed.x) {
       this.image = this.images["img/player/r1.png"];
     }
     super.render(ctx);

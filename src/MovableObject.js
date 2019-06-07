@@ -1,4 +1,5 @@
 import { GameObject } from "./GameObjects";
+
 const UP = 1,
   DOWN = 2,
   RIGHT = 3,
@@ -13,18 +14,18 @@ export class MovableObject extends GameObject {
   }
 
   move() {
-    if (this.onGround && this.speed.x > 0) this.speed.y = 0;
+    if (this.onGround && this.speed.y > 0) this.speed.y = 0;
     this.coordinates.x += this.speed.x;
     this.coordinates.y += this.speed.y;
 
     if (this.speed.y < 0) {
-      this.speed = this.speed.map(val =>
+      [this.speed.x, this.speed.y] = Object.values(this.speed).map(val =>
         Math.abs(val * 0.7) < 1 ? 0 : val * 0.7
       );
-      if (!this.onGround) this.speed.y = this.speed.y === 0 ? 15 : this.speed.y;
+      this.speed.y = this.speed.y === 0 ? 15 : this.speed.y;
     } else {
       this.speed.x = Math.abs(this.speed.x * 0.7) < 1 ? 0 : this.speed.x * 0.7;
-      if (!this.onGround) this.speed.y = 15;
+      this.speed.y = 15;
     }
   }
 
@@ -50,6 +51,7 @@ export class MovableObject extends GameObject {
     }
     return false;
   }
+
   isCollision(other) {
     let isVerticalCollision = 0,
       isHorizontalCollision = 0;
