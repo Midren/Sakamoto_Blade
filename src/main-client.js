@@ -16,7 +16,7 @@ const ctx = canvas.getContext("2d");
 const PlayerImg = loadImgsAsKeyValue(playerImagesSrc);
 const BlocksImg = loadImages(blocksImagesSrc);
 const BackgroundImg = loadImages(backgroundImagesSrc);
-const Soundtrack = getSong(audioCtx, "music/MOON_Dust.ogg");
+const Soundtrack = getSong(audioCtx, "music/MOON_Hydrogen.ogg");
 
 socket.addEventListener("open", event => {
   Promise.all([PlayerImg, BlocksImg, BackgroundImg, Soundtrack])

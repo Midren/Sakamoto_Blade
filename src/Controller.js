@@ -1,4 +1,6 @@
-export const keyHandler = (keyStatus, player) => {
+import { Bullet } from "./Bullet";
+
+export const keyHandler = (keyStatus, player, bullets) => {
   if (keyStatus.left) {
     player.speed.x += 2.5;
     player.direction = -1;
@@ -16,10 +18,18 @@ export const keyHandler = (keyStatus, player) => {
   if (keyStatus.hit) {
   }
   if (keyStatus.shoot) {
-    keyStatus.shoot = false;
-    return true;
+    let x =
+      player.coordinates.x + (player.direction === -1 ? -5 : player.size.width);
+    bullets.push(
+      new Bullet(
+        0,
+        { x: x, y: player.coordinates.y + player.size.height / 2.5 },
+        { height: 18, width: 5 },
+        null,
+        { x: player.direction * 40, y: 0 }
+      )
+    );
   }
-  return false;
 };
 
 let shooting = { is_allowed: true };

@@ -1,7 +1,12 @@
 import { Player } from "./Player";
-import { Bullet } from "./Bullet";
 import { keyHandler } from "./Controller";
 import { generate_map } from "./field";
+import {
+  handleCollisions,
+  moveObjects,
+  removeDeadPlayers,
+  serializeObjects
+} from "./gameObjectsProcessing";
 
 import http from "http";
 import path from "path";
@@ -17,77 +22,37 @@ const port = 3000;
 const wsServer = new WebSocket.Server({ server });
 
 let players = [];
-let movableObjects = [];
-let PlayerCounter = 0;
 let field = generate_map(null);
+let bullets = [];
+let playerId = 0;
 
 wsServer.on("connection", (ws, req) => {
-  console.log("New player joined the game");
-  ws.id = ++PlayerCounter;
-  players.push(
-    new Player(
-      ws.id,
-      { x: 120, y: 180 },
-      { height: 50, width: 50 },
-      { "ol.png": null },
-      { x: 0, y: 0 },
-      1
-    )
+  ws.id = ++playerId;
+  players[ws.id] = new Player(
+    ws.id,
+    { x: 120, y: 180 },
+    { height: 50, width: 50 },
+    null,
+    { x: 0, y: 0 },
+    1
   );
   ws.on("message", message => {
-    let player = players[ws.id - 1];
-    if (!player) return;
-    if (keyHandler(JSON.parse(message), player)) {
-      let x =
-        player.coordinates.x +
-        (player.direction === -1 ? -5 : player.size.width);
-      movableObjects.push(
-        new Bullet(
-          0,
-          { x: x, y: player.coordinates.y + player.size.height / 2.5 },
-          { height: 18, width: 5 },
-          null,
-          { x: player.direction * 40, y: 0 }
-        )
-      );
+    let player = players[ws.id];
+    if (!player) {
+      //TODO: Send Game Over screen;
+      return;
     }
-    players.forEach(
-      player =>
-        (player.onGround = !field.some(val => player.onCollision(val))
-          ? false
-          : player.onGround)
-    );
 
-    movableObjects.forEach((bullet, ind, arr) =>
-      [...players, ...field].forEach(block =>
-        (bullet && block
-        ? bullet.onCollision(block)
-        : null)
-          ? delete arr[ind]
-          : null
-      )
-    );
-    [...players, ...movableObjects].forEach(obj => (obj ? obj.move() : null));
-    players.forEach((val, ind, arr) =>
-      val && val.hitPoints <= 0 ? delete arr[ind] : null
-    );
+    keyHandler(JSON.parse(message), player, bullets);
+    handleCollisions(players, bullets, field);
+    moveObjects([...players, ...bullets]);
+    removeDeadPlayers(players);
 
-    let new_status = [...players, ...movableObjects].map(val =>
-      val
-        ? {
-            id: val.id,
-            x: val.coordinates.x,
-            y: val.coordinates.y,
-            direction: val.direction
-          }
-        : null
-    );
-    ws.send(JSON.stringify(new_status));
+    ws.send(serializeObjects([...players, ...bullets]));
   });
 
   ws.on("close", (reasonCode, desc) => {
-    console.log("Player has leaved");
-    delete players[ws.id - 1];
+    delete players[ws.id];
   });
 });
 
