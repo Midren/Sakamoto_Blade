@@ -33,6 +33,8 @@ wsServer.on("connection", (ws, req) => {
             console.log(message.binaryData);
         } else {
             let player = players[ws.id - 1];
+            if(!player)
+                return;
             if (keyHandler(JSON.parse(message), player)) {
                 let x = player.x + (player.direction === -1 ? -5 : player.width);
                 movableObjects.push(new Bullet(0, x, player.y + player.height / 2.5, 18, 5, null, [player.direction * 40, 0]));

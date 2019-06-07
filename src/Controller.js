@@ -27,28 +27,24 @@ let shooting = {"is_allowed": true};
 const allowShoot = can_shoot => shooting.is_allowed = true;
 
 export const keyController = (keyHelper, bool, e) => {
-    switch (e.key) {
-        case "a":
-        case "A":
+    switch (e.code || e.isComposing) {
+        case "KeyA":
         case "ArrowLeft":
             keyHelper.left = bool;
             break;
-        case "d":
-        case "D":
+        case "KeyD":
         case "ArrowRight":
             keyHelper.right = bool;
             break;
-        case "w":
-        case "W":
+        case "KeyW":
         case "ArrowUp":
             keyHelper.up = bool;
             break;
-        case "k":
-        case "K":
+        case "KeyK":
             keyHelper.hit = bool;
             break;
-        case "j":
-        case "J":
+        case "Space":
+        case "KeyJ":
             if (shooting.is_allowed && bool === true) {
                 keyHelper.shoot = bool;
                 shooting.is_allowed = false;
@@ -56,6 +52,8 @@ export const keyController = (keyHelper, bool, e) => {
             } else {
                 keyHelper.shoot = false;
             }
+            break;
+        default:
             break;
     }
 };
