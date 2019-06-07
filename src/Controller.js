@@ -27,7 +27,7 @@ let shooting = {"is_allowed": true};
 const allowShoot = can_shoot => shooting.is_allowed = true;
 
 export const keyController = (keyHelper, bool, e) => {
-    switch (e.code || e.isComposing) {
+    switch (e.code && !e.isComposing) {
         case "KeyA":
         case "ArrowLeft":
             keyHelper.left = bool;
