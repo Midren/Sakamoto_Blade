@@ -113,6 +113,8 @@ export const startGame = (
     );
   });
 
+
+
   render(
     ctx,
     field,
