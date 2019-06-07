@@ -13,16 +13,13 @@ const socket = new WebSocket("ws://127.0.0.1:3000");
 const canvas = document.getElementById("field");
 const ctx = canvas.getContext("2d");
 
-const PlayerImg = loadImgsAsKeyValue("img/player/", playerImagesSrc);
+const PlayerImg = loadImgsAsKeyValue(playerImagesSrc);
 const BlocksImg = loadImages(blocksImagesSrc);
-const BackgroundImg = loadImgsAsKeyValue(
-  "img/background/",
-  backgroundImagesSrc
-);
-const Soundtrack = getSong(audioCtx, "music/MOON_Hydrogen.ogg");
+const BackgroundImg = loadImages(backgroundImagesSrc);
+const Soundtrack = getSong(audioCtx, "music/MOON_Dust.ogg");
 
 socket.addEventListener("open", event => {
-  Promise.all([PlayerImg, BlocksImg, BackgroundImg, Soundtrack]).then(values =>
-    startGame.bind(null, ctx, audioCtx, socket, ...values)()
-  );
+  Promise.all([PlayerImg, BlocksImg, BackgroundImg, Soundtrack])
+      .then(values => startGame(ctx, audioCtx, socket, ...values))
+      .catch(error => console.log(error));
 });
