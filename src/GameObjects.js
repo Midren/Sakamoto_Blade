@@ -80,7 +80,7 @@ export class MovableObject extends GameObject {
         this.y += this.speed[1];
 
         if (this.speed[1] < 0) {
-            this.speed = this.speed.map(val => Math.abs(val * 0.3) < 1 ? 0 : val * 0.7);
+            this.speed = this.speed.map(val => Math.abs(val * 0.7) < 1 ? 0 : val * 0.7);
             if (!this.speed[1].onGround)
                 this.speed[1] = this.speed[1] === 0 ? 15 : this.speed[1];
         } else {

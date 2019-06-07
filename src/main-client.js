@@ -18,5 +18,3 @@ socket.addEventListener('open', event => {
         .then(values =>
             startGame.bind(null, ctx, audioCtx, socket, ...values)());
 });
-
-
