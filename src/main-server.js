@@ -20,8 +20,7 @@ const wsServer = new WebSocket.Server({
 let players = [];
 let movableObjects = [];
 let PlayerCounter = 0;
-let field = [];
-generate_map(field, null);
+let field = generate_map(null);
 
 wsServer.on("connection", (ws, req) => {
     console.log("New player joined the game");

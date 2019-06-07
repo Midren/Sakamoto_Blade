@@ -18,13 +18,12 @@ export const fieldBlueprint =
     "########################";
 // @formatter:on
 
-export const generate_map = (field, blockImg) => {
+export const generate_map = (blockImg) => {
     const cell_size = 50;
     const width = 1200;
-    fieldBlueprint.split('').forEach((val, ind) =>
+    return fieldBlueprint.split('').map((val, ind) =>
         val === "#" ?
-            field.push(
-                new GameObject((ind % (width / cell_size)) * cell_size, Math.floor(ind / (width / cell_size)) * cell_size, 50, 50, blockImg))
+            new GameObject((ind % (width / cell_size)) * cell_size, Math.floor(ind / (width / cell_size)) * cell_size, 50, 50, blockImg)
             : null
-    );
+    ).filter((val) => val);
 };
