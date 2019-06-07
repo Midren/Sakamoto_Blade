@@ -1,0 +1,9 @@
+.game-field__loading-screen {
+  display: flex;
+  margin: 0 auto;
+}
+.game-field__canvas {
+  display: none;
+  margin: 0 auto;
+  border: 1px solid black;
+}

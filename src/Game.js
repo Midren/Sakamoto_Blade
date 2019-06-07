@@ -39,7 +39,7 @@ const render = (
     requestAnimationFrame(render);
   };
 
-  render()
+  render();
 };
 
 export const startGame = (
@@ -53,8 +53,11 @@ export const startGame = (
 ) => {
   const [platformSprite, lavaSprite] = blocksImg;
 
-  document.getElementById("loading_screen").style.display = "none";
-  document.getElementById("field").style.display = "flex";
+  document.getElementsByClassName(
+    "game-field__loading-screen"
+  )[0].style.display = "none";
+  document.getElementsByClassName("game-field__canvas")[0].style.display =
+    "flex";
 
   let keyStatus = {
     left: false,
@@ -112,8 +115,6 @@ export const startGame = (
         : null
     );
   });
-
-
 
   render(
     ctx,

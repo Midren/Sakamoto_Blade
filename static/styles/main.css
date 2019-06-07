@@ -1,0 +1,13 @@
+.main {
+  background-color: #34495e;
+  min-height: 100%;
+}
+.main__top-bar {
+  display: flex;
+}
+.main__game-name {
+  margin: auto;
+  font-size: 5rem;
+  font-family: Pixelbroidery, serif;
+  color: darkred;
+}

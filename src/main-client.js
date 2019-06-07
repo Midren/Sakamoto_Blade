@@ -10,7 +10,7 @@ import { startGame } from "./Game";
 
 const audioCtx = new AudioContext();
 const socket = new WebSocket("ws://127.0.0.1:3000");
-const canvas = document.getElementById("field");
+const canvas = document.getElementsByClassName("game-field__canvas")[0];
 const ctx = canvas.getContext("2d");
 
 const PlayerImg = loadImgsAsKeyValue("img/player/", playerImagesSrc);
