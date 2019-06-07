@@ -7,11 +7,17 @@ export const playTrack = (audioCtx, audioBuffer) => {
   const trackSource = audioCtx.createBufferSource();
   trackSource.buffer = audioBuffer;
   trackSource.connect(audioCtx.destination);
-
   trackSource.start();
-
   return trackSource;
 };
+export const backGroundAnimation = (ctx, backgroundImg,background,counter) =>
+    setInterval(
+        ((ctx, backgroundImg) => {
+          background.image = backgroundImg[counter.n];
+          counter.n = ++counter.n % Object.keys(backgroundImg).length;
+        }).bind(null, ctx, backgroundImg, counter),
+        100
+    );
 
 const loadImg = async src =>
   new Promise((res, rej) => {

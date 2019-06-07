@@ -1,9 +1,41 @@
 import { keyController } from "./Controller";
 import { Bullet } from "./Bullet";
 import { Player } from "./Player";
-import { playTrack } from "./media";
+import { playTrack, backGroundAnimation, getSong } from "./media";
 import { generate_map } from "./field";
 
+const startListenFromServer = (
+  movableObjects,
+  socket,
+  [playerImg, lavaSprite]
+) =>
+  socket.addEventListener("message", event => {
+    movableObjects.length = 0;
+    JSON.parse(event.data).forEach(entity =>
+      entity && entity.id
+        ? movableObjects.push(
+            new Player(
+              entity.id,
+              { x: entity.x, y: entity.y },
+              { height: 50, width: 50 },
+              playerImg,
+              { x: 1, y: 0 },
+              entity.direction
+            )
+          )
+        : entity && !entity.id
+        ? movableObjects.push(
+            new Bullet(
+              0,
+              { x: entity.x, y: entity.y },
+              { height: 18, width: 5 },
+              lavaSprite,
+              { x: entity.direction * 40, y: 0 }
+            )
+          )
+        : null
+    );
+  });
 const clear = ctx => ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 const drawImage = (ctx, image, options = {}) => {
   const imgBbox = image;
@@ -43,15 +75,9 @@ const activateGameField = () => {
     .classList.remove("game-field__canvas_disabled");
 };
 
-export const startGame = (
-  ctx,
-  audioCtx,
-  socket,
-  playerImg,
-  blocksImg,
-  backgroundImg,
-  soundtrack
-) => {
+export const startGame = (ctx, socket, playerImg, blocksImg, backgroundImg) => {
+  const audioCtx = new AudioContext();
+  const soundtrack = getSong(audioCtx, "music/MOON_Dust.ogg");
   const [platformSprite, lavaSprite] = blocksImg;
 
   activateGameField();
@@ -63,53 +89,16 @@ export const startGame = (
     hit: false,
     shoot: false
   };
-
   let movableObjects = [];
   let field = generate_map(platformSprite);
-
   document.onkeydown = keyController.bind(null, keyStatus, true);
   document.onkeyup = keyController.bind(null, keyStatus, false);
 
   let background = { image: backgroundImg[0] };
   let counter = { n: 0 };
 
-  setInterval(
-    ((ctx, backgroundImg) => {
-      background.image = backgroundImg[counter.n];
-      counter.n = ++counter.n % Object.keys(backgroundImg).length;
-    }).bind(null, ctx, backgroundImg, counter),
-    100
-  );
-
-  playTrack(audioCtx, soundtrack);
-
-  socket.addEventListener("message", event => {
-    movableObjects.length = 0;
-    JSON.parse(event.data).forEach(entity =>
-      entity && entity.id
-        ? movableObjects.push(
-            new Player(
-              entity.id,
-              { x: entity.x, y: entity.y },
-              { height: 50, width: 50 },
-              playerImg,
-              { x: 1, y: 0 },
-              entity.direction
-            )
-          )
-        : entity && !entity.id
-        ? movableObjects.push(
-            new Bullet(
-              0,
-              { x: entity.x, y: entity.y },
-              { height: 18, width: 5 },
-              lavaSprite,
-                {x:entity.direction * 40, y:0}
-            )
-          )
-        : null
-    );
-  });
-
+  backGroundAnimation(ctx, backgroundImg, background, counter);
+  soundtrack.then(song => playTrack(audioCtx, song));
+  startListenFromServer(movableObjects, socket, [playerImg, lavaSprite]);
   render(ctx, field, movableObjects, keyStatus, background, socket);
 };
