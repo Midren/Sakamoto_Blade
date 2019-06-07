@@ -109,8 +109,8 @@ export class GameObject {
       this.image,
       this.coordinates.x,
       this.coordinates.y,
-      this.size.width,
-      this.size.height
+      this.size.height,
+      this.size.width
     );
   }
 }

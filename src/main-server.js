@@ -34,7 +34,6 @@ wsServer.on("connection", (ws, req) => {
       1
     )
   );
-  console.log(players);
   ws.on("message", message => {
     let player = players[ws.id - 1];
     if (!player) return;

@@ -44,6 +44,7 @@ export const startGame = (
   soundtrack
 ) => {
   const [platformSprite, lavaSprite] = blocksImg;
+  console.log(lavaSprite);
 
   document.getElementsByClassName(
     "game-field__loading-screen"
