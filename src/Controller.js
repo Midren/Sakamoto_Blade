@@ -58,6 +58,6 @@ export const keyController = (keyHelper, bool, e) => {
       }
       break;
     default:
-        break;
+      break;
   }
 };

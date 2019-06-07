@@ -1,5 +1,6 @@
 import { keyController } from "./Controller";
-import { Bullet, Player } from "./Entity";
+import { Bullet } from "./Bullet";
+import { Player } from "./Player";
 import { playTrack } from "./media";
 import { generate_map } from "./field";
 

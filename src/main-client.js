@@ -20,6 +20,6 @@ const Soundtrack = getSong(audioCtx, "music/MOON_Dust.ogg");
 
 socket.addEventListener("open", event => {
   Promise.all([PlayerImg, BlocksImg, BackgroundImg, Soundtrack])
-      .then(values => startGame(ctx, audioCtx, socket, ...values))
-      .catch(error => console.log(error));
+    .then(values => startGame(ctx, audioCtx, socket, ...values))
+    .catch(error => console.log(error));
 });

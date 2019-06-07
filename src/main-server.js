@@ -1,4 +1,5 @@
-import { Bullet, Player } from "./Entity";
+import { Player } from "./Player";
+import { Bullet } from "./Bullet";
 import { keyHandler } from "./Controller";
 import { generate_map } from "./field";
 
