@@ -17,14 +17,7 @@ const drawImage = (ctx, image, options = {}) => {
   ctx.drawImage(image, x, y, width, height);
 };
 
-const render = (
-  ctx,
-  field,
-  movableObjects,
-  keyStatus,
-  background,
-  socket
-) => {
+const render = (ctx, field, movableObjects, keyStatus, background, socket) => {
   const render = () => {
     clear(ctx);
     drawImage(ctx, background.image);
@@ -57,7 +50,13 @@ export const startGame = (
   document.getElementsByClassName("game-field__canvas")[0].style.display =
     "flex";
 
-  let keyStatus = {left: false, right: false, up: false, hit: false, shoot: false};
+  let keyStatus = {
+    left: false,
+    right: false,
+    up: false,
+    hit: false,
+    shoot: false
+  };
 
   let movableObjects = [];
   let field = generate_map(platformSprite);
@@ -85,10 +84,8 @@ export const startGame = (
         ? movableObjects.push(
             new Player(
               entity.id,
-              entity.x,
-              entity.y,
-              50,
-              50,
+              [entity.x, entity.y],
+              [50, 50],
               playerImg,
               [1, 0],
               entity.direction
@@ -96,7 +93,7 @@ export const startGame = (
           )
         : entity && !entity.id
         ? movableObjects.push(
-            new Bullet(0, entity.x, entity.y, 18, 5, lavaSprite, [
+            new Bullet(0, [entity.x, entity.y], [18, 5], lavaSprite, [
               entity.direction * 40,
               0
             ])
@@ -105,13 +102,5 @@ export const startGame = (
     );
   });
 
-
-  render(
-      ctx,
-      field,
-      movableObjects,
-      keyStatus,
-      background,
-      socket
-  );
+  render(ctx, field, movableObjects, keyStatus, background, socket);
 };
