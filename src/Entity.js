@@ -21,10 +21,10 @@ export class Player extends MovableObject {
 
     render(ctx) {
         if (this.direction === -1 && this.speed[0]) {
-            this.image = this.images["l" + Math.floor(this.tmp / 10).toString() + ".png"];
+            this.image = this.images["l" + "1.png"];
             this.tmp = (this.tmp + 1) % 60 + 10;
         } else if (this.direction === 1 && this.speed[0]) {
-            this.image = this.images["r" + Math.floor(this.tmp / 10).toString() + ".png"];
+            this.image = this.images["r" + "1.png"];
             this.tmp = (this.tmp + 1) % 60 + 10;
         }
         super.render(ctx);
