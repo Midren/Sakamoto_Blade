@@ -14,8 +14,7 @@ const soundtrack = getSong(audioCtx, "music/MOON_Hydrogen.ogg");
 
 socket.addEventListener('open', event => {
     console.log("Connected");
-
-    Promise.all([playerImg, blocksImg, backgroundImg, soundtrack])
+    Promise.all([PlayerImg, BlocksImg, BackgroundImg, Soundtrack])
         .then(values =>
             startGame.bind(null, ctx, audioCtx, socket, ...values)());
 });
