@@ -6,10 +6,10 @@ const socket = new WebSocket("ws://127.0.0.1:3000");
 const canvas = document.getElementById("field");
 const ctx = canvas.getContext("2d");
 
-const playerImg = loadImgs("img/player/", playerImagesSrc);
-const blocksImg = loadImgs("img/blocks/", blocksImagesSrc);
-const backgroundImg = loadImgs("img/background/", backgroundImagesSrc);
-const soundtrack = getSong(audioCtx, "music/MOON_Hydrogen.ogg");
+const PlayerImg = loadImgs("img/player/", playerImagesSrc);
+const BlocksImg = loadImgs("img/blocks/", blocksImagesSrc);
+const BackgroundImg = loadImgs("img/background/", backgroundImagesSrc);
+const Soundtrack = getSong(audioCtx, "music/MOON_Hydrogen.ogg");
 
 
 socket.addEventListener('open', event => {
