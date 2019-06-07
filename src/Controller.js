@@ -27,7 +27,10 @@ let shooting = {"is_allowed": true};
 const allowShoot = can_shoot => shooting.is_allowed = true;
 
 export const keyController = (keyHelper, bool, e) => {
-    switch (e.code && !e.isComposing) {
+    if (e.ctrlKey || e.metaKey)
+        e.preventDefault();
+    console.log(e);
+    switch (e.code) {
         case "KeyA":
         case "ArrowLeft":
             keyHelper.left = bool;
@@ -54,6 +57,6 @@ export const keyController = (keyHelper, bool, e) => {
             }
             break;
         default:
-            break;
+            e.preventDefault();
     }
 };
