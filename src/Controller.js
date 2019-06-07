@@ -27,8 +27,7 @@ let shooting = {"is_allowed": true};
 const allowShoot = can_shoot => shooting.is_allowed = true;
 
 export const keyController = (keyHelper, bool, e) => {
-    if (e.ctrlKey || e.metaKey)
-        e.preventDefault();
+    e.preventDefault();
     console.log(e);
     switch (e.code) {
         case "KeyA":
