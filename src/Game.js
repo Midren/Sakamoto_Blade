@@ -34,6 +34,15 @@ const render = (ctx, field, movableObjects, keyStatus, background, socket) => {
   render();
 };
 
+const activateGameField = () => {
+  document
+    .getElementsByClassName("game-field__loading-screen")[0]
+    .classList.add("game-field__loading-screen_disabled");
+  document
+    .getElementsByClassName("game-field__canvas")[0]
+    .classList.remove("game-field__canvas_disabled");
+};
+
 export const startGame = (
   ctx,
   audioCtx,
@@ -44,13 +53,8 @@ export const startGame = (
   soundtrack
 ) => {
   const [platformSprite, lavaSprite] = blocksImg;
-  console.log(lavaSprite);
 
-  document.getElementsByClassName(
-    "game-field__loading-screen"
-  )[0].style.display = "none";
-  document.getElementsByClassName("game-field__canvas")[0].style.display =
-    "flex";
+  activateGameField();
 
   let keyStatus = {
     left: false,
