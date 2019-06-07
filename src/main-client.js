@@ -87,7 +87,7 @@ const startGame = (playerImg, blocksImg, backgroundImg, soundtrack) => {
         entity.forEach(entity => {
             if (entity) {
                 if (entity.id) {
-                    movableObjects.push(new Player(0, entity.x, entity.y, 50, 50, playerImg, [1, 0], entity.direction));
+                    movableObjects.push(new Player(entity.id, entity.x, entity.y, 50, 50, playerImg, [1, 0], entity.direction));
                 } else {
                     movableObjects.push(new Bullet(0, entity.x, entity.y, 18, 5, blocksImg["lava.png"], [entity.direction * 40, 0]));
                 }

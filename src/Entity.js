@@ -20,12 +20,15 @@ export class Player extends MovableObject {
     }
 
     render(ctx) {
+        ctx.font = "14px Bold Arial";
+        ctx.fillStyle = "white";
+        ctx.fillText("Player " + this.id.toString(), this.x, this.y);
         if (this.direction === -1 && this.speed[0]) {
             this.image = this.images["l" + Math.floor(this.tmp / 10).toString() + ".png"];
-            this.tmp = (this.tmp + 1) % 60 + 10;
+            // this.tmp = (this.tmp + 1) % 60 + 10;
         } else if (this.direction === 1 && this.speed[0]) {
             this.image = this.images["r" + Math.floor(this.tmp / 10).toString() + ".png"];
-            this.tmp = (this.tmp + 1) % 60 + 10;
+            // this.tmp = (this.tmp + 1) % 60 + 10;
         }
         super.render(ctx);
     }
