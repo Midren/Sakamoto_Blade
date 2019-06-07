@@ -1,4 +1,4 @@
-import {keyController, keyHandler} from "./Controller";
+import {keyController} from "./Controller";
 import {GameObject} from "./GameObjects";
 import {Bullet, Player} from "./Entity";
 import {playTrack, getSong} from "./music";

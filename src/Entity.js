@@ -2,10 +2,11 @@ import {MovableObject} from "./GameObjects";
 
 export class Player extends MovableObject {
     constructor(id, x, y, height, width, images, speed, direction) {
-        super(id,x, y, height, width, images["0l.png"], speed);
+        super(id, x, y, height, width, images["0l.png"], speed);
         this.images = images;
         this.direction = direction;
         this.tmp = 10;
+        this.hp = 3;
     }
 
     move() {
@@ -36,6 +37,11 @@ export class Bullet extends MovableObject {
     }
 
     onCollision(other) {
-        // super.onCollision(other);
+        if (this.isCollision(other)) {
+            if (other instanceof Player) {
+                other.hp--;
+            }
+            return true;
+        }
     }
 }

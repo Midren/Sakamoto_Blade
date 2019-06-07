@@ -1,5 +1,4 @@
 import {Bullet, Player} from "./Entity";
-import {GameObject} from "./GameObjects";
 import {keyHandler} from "./Controller";
 import {generate_map} from "./field";
 
@@ -36,7 +35,7 @@ wsServer.on("connection", (ws, req) => {
         } else {
             let player = players[ws.id - 1];
             if (keyHandler(JSON.parse(message), player)) {
-                let x = player.x + (player.direction === -1 ? 0 : player.width);
+                let x = player.x + (player.direction === -1 ? -5 : player.width);
                 movableObjects.push(new Bullet(0, x, player.y + player.height / 2.5, 18, 5, null, [player.direction * 40, 0]));
             }
             players.forEach(player => {
@@ -44,8 +43,12 @@ wsServer.on("connection", (ws, req) => {
                     player.onGround = false;
                 }
             });
-
+            // movableObjects.forEach(bullet => players.forEach(plr => bullet ? bullet.onCollision(plr) : null));
+            movableObjects.forEach((bullet, ind, arr) => [...players, ...field]
+                .forEach(block => (bullet && block ? bullet.onCollision(block) : null) ? delete arr[ind] : null));
             [...players, ...movableObjects].forEach(obj => obj ? obj.move() : null);
+            players.forEach((val, ind, arr) => val && (val.hp <= 0) ? delete arr[ind] : null);
+
             let new_status = [...players, ...movableObjects].map(val => val ? {
                     "id": val.id,
                     "x": val.x,
@@ -54,7 +57,6 @@ wsServer.on("connection", (ws, req) => {
                 } : null)
             ;
             ws.send(JSON.stringify(new_status));
-            // console.log(new_status);
         }
     })
     ;
