@@ -4,6 +4,7 @@
   "description": "2D game with platform and shooting aspects",
   "main": "dist/bundle.js",
   "scripts": {
+    "start": "webpack --config ./webpack-server.config.js && webpack --config ./webpack-client.config.js && node dist/bundle-server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -26,7 +27,8 @@
     "webpack": "^4.32.2",
     "webpack-node-externals": "^1.7.2",
     "websocket": "^1.0.28",
-    "ws": "^7.0.0"
+    "ws": "^7.0.0",
+    "yarn": "^1.16.0"
   },
   "devDependencies": {
     "file-loader": "^4.0.0",

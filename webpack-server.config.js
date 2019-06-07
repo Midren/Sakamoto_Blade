@@ -18,5 +18,5 @@ module.exports = {
     externals: [nodeExternals({
         whitelist: ['express*', 'websocket*']
     })],
-    watch: true,
+    // watch: true,
 };
