@@ -1,4 +1,4 @@
-let UP = 1,
+const UP = 1,
   DOWN = 2,
   RIGHT = 3,
   LEFT = 4;
@@ -14,7 +14,7 @@ export class GameObject {
     let isVerticalCollision = 0,
       isHorizontalCollision = 0;
     if (
-      this.coordinates.x + this.size.height > other.coordintates.y &&
+      this.coordinates.x + this.size.height > other.coordinates.y &&
       this.coordinates.y < other.coordinates.y + other.size.height
     ) {
       if (
@@ -109,8 +109,8 @@ export class GameObject {
       this.image,
       this.coordinates.x,
       this.coordinates.y,
-      this.size.height,
-      this.size.width
+      this.size.width,
+      this.size.height
     );
   }
 }

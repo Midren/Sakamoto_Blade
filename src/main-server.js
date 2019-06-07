@@ -25,18 +25,28 @@ wsServer.on("connection", (ws, req) => {
   console.log("New player joined the game");
   ws.id = ++PlayerCounter;
   players.push(
-    new Player(ws.id, 120, 180, 50, 50, { "ol.png": null }, [0, 0], 1)
+    new Player(
+      ws.id,
+      { x: 120, y: 180 },
+      { height: 50, width: 50 },
+      { "ol.png": null },
+      [0, 0],
+      1
+    )
   );
   ws.on("message", message => {
     let player = players[ws.id - 1];
     if (!player) return;
     if (keyHandler(JSON.parse(message), player)) {
-      let x = player.x + (player.direction === -1 ? -5 : player.width);
+      let x = player.coordinates.x + (player.direction === -1 ? -5 : player.size.width);
       movableObjects.push(
-        new Bullet(0, x, player.y + player.height / 2.5, 18, 5, null, [
-          player.direction * 40,
-          0
-        ])
+        new Bullet(
+          0,
+          { x: x, y: player.coordinates.y + player.size.height / 2.5 },
+          { height: 18, width: 5 },
+          null,
+          [player.direction * 40, 0]
+        )
       );
     }
     players.forEach(
@@ -57,15 +67,15 @@ wsServer.on("connection", (ws, req) => {
     );
     [...players, ...movableObjects].forEach(obj => (obj ? obj.move() : null));
     players.forEach((val, ind, arr) =>
-      val && val.hp <= 0 ? delete arr[ind] : null
+      val && val.hitPoints <= 0 ? delete arr[ind] : null
     );
 
     let new_status = [...players, ...movableObjects].map(val =>
       val
         ? {
             id: val.id,
-            x: val.x,
-            y: val.y,
+            x: val.coordinates.x,
+            y: val.coordinates.y,
             direction: val.direction
           }
         : null

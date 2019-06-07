@@ -80,13 +80,14 @@ export const startGame = (
 
   socket.addEventListener("message", event => {
     movableObjects.length = 0;
+    console.log(JSON.parse(event.data).length);
     JSON.parse(event.data).forEach(entity =>
       entity && entity.id
         ? movableObjects.push(
             new Player(
               entity.id,
-              [entity.x, entity.y],
-              [50, 50],
+              { x: entity.x, y: entity.y },
+              { height: 50, width: 50 },
               playerImg,
               [1, 0],
               entity.direction
@@ -94,10 +95,13 @@ export const startGame = (
           )
         : entity && !entity.id
         ? movableObjects.push(
-            new Bullet(0, [entity.x, entity.y], [18, 5], lavaSprite, [
-              entity.direction * 40,
-              0
-            ])
+            new Bullet(
+              0,
+              { x: entity.x, y: entity.y },
+              { height: 18, width: 5 },
+              lavaSprite,
+              [entity.direction * 40, 0]
+            )
           )
         : null
     );

@@ -28,11 +28,11 @@ export const generate_map = blockImg => {
     .map((val, ind) =>
       val === PLATFORM
         ? new GameObject(
-            [
-              (ind % (width / cellSize)) * cellSize,
-              Math.floor((ind / width) * cellSize) * cellSize
-            ],
-            [cellSize, cellSize],
+            {
+              x: (ind % (width / cellSize)) * cellSize,
+              y: Math.floor((ind / width) * cellSize) * cellSize
+            },
+            { height: cellSize, width: cellSize },
             blockImg
           )
         : null
