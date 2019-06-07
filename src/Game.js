@@ -22,8 +22,6 @@ const render = (
   field,
   movableObjects,
   keyStatus,
-  playerImg,
-  blocksImg,
   background,
   socket
 ) => {
@@ -59,13 +57,7 @@ export const startGame = (
   document.getElementsByClassName("game-field__canvas")[0].style.display =
     "flex";
 
-  let keyStatus = {
-    left: false,
-    right: false,
-    up: false,
-    hit: false,
-    shoot: false
-  };
+  let keyStatus = {left: false, right: false, up: false, hit: false, shoot: false};
 
   let movableObjects = [];
   let field = generate_map(platformSprite);
@@ -73,15 +65,12 @@ export const startGame = (
   document.onkeydown = keyController.bind(null, keyStatus, true);
   document.onkeyup = keyController.bind(null, keyStatus, false);
 
-  let background = { image: backgroundImg["frame_000.png"] };
+  let background = { image: backgroundImg[0] };
   let counter = { n: 0 };
 
   setInterval(
     ((ctx, backgroundImg) => {
-      background.image =
-        backgroundImg[
-          "frame_" + counter.n.toString().padStart(3, "0") + ".png"
-        ];
+      background.image = backgroundImg[counter.n];
       counter.n = ++counter.n % Object.keys(backgroundImg).length;
     }).bind(null, ctx, backgroundImg, counter),
     100
@@ -116,14 +105,13 @@ export const startGame = (
     );
   });
 
+
   render(
-    ctx,
-    field,
-    movableObjects,
-    keyStatus,
-    playerImg,
-    blocksImg,
-    background,
-    socket
+      ctx,
+      field,
+      movableObjects,
+      keyStatus,
+      background,
+      socket
   );
 };

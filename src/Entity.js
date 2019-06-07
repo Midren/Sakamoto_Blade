@@ -21,11 +21,11 @@ export class Player extends MovableObject {
     ctx.fillText("Player " + this.id.toString(), this.x, this.y);
     if (this.direction === -1 && this.speed[0]) {
       this.image = this.images[
-        "l" + Math.floor(this.tmp / 10).toString() + ".png"
+        "img/player/l" + Math.floor(this.tmp / 10).toString() + ".png"
       ];
     } else if (this.direction === 1 && this.speed[0]) {
       this.image = this.images[
-        "r" + Math.floor(this.tmp / 10).toString() + ".png"
+        "img/player/r" + Math.floor(this.tmp / 10).toString() + ".png"
       ];
     }
     super.render(ctx);
