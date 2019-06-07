@@ -50,54 +50,56 @@ export class GameObject {
     if (!isVerticalCollision) return isHorizontalCollision;
     if (!isHorizontalCollision) return isVerticalCollision;
     let new_this = {
-      UP: {
-        RIGHT: {
+      [UP]: {
+        [RIGHT]: {
           x: this.coordinates.x + this.size.width,
           y: this.coordinates.y + this.size.height
         },
-        LEFT: {
+        [LEFT]: {
           x: this.coordinates.x,
           y: this.coordinates.y + this.size.height
         }
       },
-      DOWN: {
-        RIGHT: {
+      [DOWN]: {
+        [RIGHT]: {
           x: this.coordinates.x + this.size.width,
           y: this.coordinates.y
         },
-        LEFT: { x: this.coordinates.x, y: this.coordinates.y }
+        [LEFT]: { x: this.coordinates.x, y: this.coordinates.y }
       }
     };
     let new_other = {
-      UP: {
-        RIGHT: { x: other.coordinates.x, y: other.coordinates.y },
-        LEFT: {
+      [UP]: {
+        [RIGHT]: { x: other.coordinates.x, y: other.coordinates.y },
+        [LEFT]: {
           x: other.coordinates.x + other.size.width,
           y: other.coordinates.y
         }
       },
-      DOWN: {
-        RIGHT: {
+      [DOWN]: {
+        [RIGHT]: {
           x: other.coordinates.x,
           y: other.coordinates.y + other.size.height
         },
-        LEFT: {
+        [LEFT]: {
           x: other.coordinates.x + other.size.width,
           y: other.coordinates.y + other.size.height
         }
       }
     };
+    console.log(new_this);
+    console.log(new_other);
     if (isVerticalCollision === DOWN && this.speed[UP] < 0) {
       return isVerticalCollision;
     }
     return Math.pow(
-      new_other[isVerticalCollision][isHorizontalCollision].coordinates.x -
-        new_this[isVerticalCollision][isHorizontalCollision].coordinates.x,
+      new_other[isVerticalCollision][isHorizontalCollision].x -
+        new_this[isVerticalCollision][isHorizontalCollision].x,
       DOWN
     ) >=
       Math.pow(
-        new_other[isVerticalCollision][isHorizontalCollision].coordinates.y -
-          new_this[isVerticalCollision][isHorizontalCollision].coordinates.y,
+        new_other[isVerticalCollision][isHorizontalCollision].y -
+          new_this[isVerticalCollision][isHorizontalCollision].y,
         DOWN
       )
       ? isVerticalCollision
