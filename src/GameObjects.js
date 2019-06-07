@@ -53,17 +53,10 @@ export class GameObject {
                 "4": {"x": other.x + other.width, "y": other.y + other.height}
             }
         };
-        if (s == 2 && this.speed[1] < 0) {
+        if (s === 2 && this.speed[1] < 0) {
             return s;
         }
-        // console.log(other.x, other.y);
-        if (Math.pow(new_other[s][t].x - new_this[s][t].x, 2) >= Math.pow(new_other[s][t].y - new_this[s][t].y, 2)) {
-            // console.log(s);
-            return s;
-        } else {
-            // console.log('falling');
-            return t;
-        }
+        return Math.pow(new_other[s][t].x - new_this[s][t].x, 2) >= Math.pow(new_other[s][t].y - new_this[s][t].y, 2) ? s : t;
     }
 
     render(ctx) {
@@ -83,11 +76,6 @@ export class MovableObject extends GameObject {
     move() {
         if (this.onGround && this.speed[1] > 0)
             this.speed[1] = 0;
-        if (this.y + this.height >= 720 && this.speed[1] > 0)
-            this.speed[1] = 0;
-        if ((this.x + this.speed[0] < 0) || (this.speed[0] + this.x + this.width) > 1200) {
-            this.speed[0] = 0;
-        }
         this.x += this.speed[0];
         this.y += this.speed[1];
 
@@ -100,8 +88,6 @@ export class MovableObject extends GameObject {
             if (!this.speed[1].onGround)
                 this.speed[1] = 15;
         }
-        if (this.y + this.height >= 720 && this.speed[1] > 0)
-            this.speed[1] = 0;
     }
 
     onCollision(other) {

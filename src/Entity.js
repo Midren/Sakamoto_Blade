@@ -15,10 +15,6 @@ export class Player extends MovableObject {
         this.speed[0] *= this.direction;
     }
 
-    hit() {
-
-    }
-
     render(ctx) {
         ctx.font = "14px Bold Arial";
         ctx.fillStyle = "white";

@@ -1,4 +1,5 @@
 import {GameObject} from "./GameObjects";
+
 // @formatter:off
 export const fieldBlueprint =
     "########################" +
@@ -16,6 +17,7 @@ export const fieldBlueprint =
     "##....................##" +
     "########################";
 // @formatter:on
+
 export const generate_map = (field, blockImg) => {
     const cell_size = 50;
     const width = 1200;

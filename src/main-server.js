@@ -38,12 +38,8 @@ wsServer.on("connection", (ws, req) => {
                 let x = player.x + (player.direction === -1 ? -5 : player.width);
                 movableObjects.push(new Bullet(0, x, player.y + player.height / 2.5, 18, 5, null, [player.direction * 40, 0]));
             }
-            players.forEach(player => {
-                if (!field.some(val => player.onCollision(val))) {
-                    player.onGround = false;
-                }
-            });
-            // movableObjects.forEach(bullet => players.forEach(plr => bullet ? bullet.onCollision(plr) : null));
+            players.forEach(player => player.onGround = !field.some(val => player.onCollision(val)) ? false : player.onGround);
+
             movableObjects.forEach((bullet, ind, arr) => [...players, ...field]
                 .forEach(block => (bullet && block ? bullet.onCollision(block) : null) ? delete arr[ind] : null));
             [...players, ...movableObjects].forEach(obj => obj ? obj.move() : null);

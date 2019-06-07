@@ -23,31 +23,36 @@ export const keyHandler = (keyStatus, player) => {
     return false;
 };
 
-let can_shoot = {"is_allowed": true};
-const allowShoot = can_shoot => can_shoot.is_allowed = true;
+let shooting = {"is_allowed": true};
+const allowShoot = can_shoot => shooting.is_allowed = true;
 
 export const keyController = (keyHelper, bool, e) => {
     switch (e.key) {
         case "a":
+        case "A":
         case "ArrowLeft":
             keyHelper.left = bool;
             break;
         case "d":
+        case "D":
         case "ArrowRight":
             keyHelper.right = bool;
             break;
         case "w":
+        case "W":
         case "ArrowUp":
             keyHelper.up = bool;
             break;
         case "k":
+        case "K":
             keyHelper.hit = bool;
             break;
         case "j":
-            if (can_shoot.is_allowed && bool === true) {
+        case "J":
+            if (shooting.is_allowed && bool === true) {
                 keyHelper.shoot = bool;
-                can_shoot.is_allowed = false;
-                setTimeout(allowShoot.bind(null, can_shoot), 500);
+                shooting.is_allowed = false;
+                setTimeout(allowShoot.bind(null, shooting), 500);
             } else {
                 keyHelper.shoot = false;
             }
