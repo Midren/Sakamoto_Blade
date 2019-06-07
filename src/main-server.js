@@ -30,7 +30,7 @@ wsServer.on("connection", (ws, req) => {
       { x: 120, y: 180 },
       { height: 50, width: 50 },
       { "ol.png": null },
-      [0, 0],
+      { x: 0, y: 0 },
       1
     )
   );
@@ -47,7 +47,7 @@ wsServer.on("connection", (ws, req) => {
           { x: x, y: player.coordinates.y + player.size.height / 2.5 },
           { height: 18, width: 5 },
           null,
-          [player.direction * 40, 0]
+          { x: player.direction * 40, y: 0 }
         )
       );
     }

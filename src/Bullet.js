@@ -3,7 +3,7 @@ import { Player } from "./Player";
 
 export class Bullet extends MovableObject {
   move() {
-    this.coordinates.x += this.speed[0];
+    this.coordinates.x += this.speed.x;
   }
 
   onCollision(other) {

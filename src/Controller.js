@@ -1,15 +1,15 @@
 export const keyHandler = (keyStatus, player) => {
   if (keyStatus.left) {
-    player.speed[0] += 2.5;
+    player.speed.x += 2.5;
     player.direction = -1;
   }
   if (keyStatus.right) {
-    player.speed[0] += 2.5;
+    player.speed.x += 2.5;
     player.direction = 1;
   }
   if (keyStatus.up) {
     if (player.onGround) {
-      player.speed[1] = -30;
+      player.speed.y = -30;
       player.onGround = false;
     }
   }

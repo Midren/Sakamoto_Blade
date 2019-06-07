@@ -89,7 +89,7 @@ export const startGame = (
               { x: entity.x, y: entity.y },
               { height: 50, width: 50 },
               playerImg,
-              [1, 0],
+              { x: 1, y: 0 },
               entity.direction
             )
           )
@@ -100,7 +100,7 @@ export const startGame = (
               { x: entity.x, y: entity.y },
               { height: 18, width: 5 },
               lavaSprite,
-              [entity.direction * 40, 0]
+                {x:entity.direction * 40, y:0}
             )
           )
         : null
