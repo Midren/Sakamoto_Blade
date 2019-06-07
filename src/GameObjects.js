@@ -14,7 +14,7 @@ export class GameObject {
     let isVerticalCollision = 0,
       isHorizontalCollision = 0;
     if (
-      this.coordinates.x + this.size.height > other.coordinates.y &&
+      this.coordinates.y + this.size.height > other.coordinates.y &&
       this.coordinates.y < other.coordinates.y + other.size.height
     ) {
       if (
@@ -50,55 +50,55 @@ export class GameObject {
     if (!isVerticalCollision) return isHorizontalCollision;
     if (!isHorizontalCollision) return isVerticalCollision;
     let new_this = {
-      UP: {
-        RIGHT: {
+      [UP]: {
+        [RIGHT]: {
           x: this.coordinates.x + this.size.width,
           y: this.coordinates.y + this.size.height
         },
-        LEFT: {
+        [LEFT]: {
           x: this.coordinates.x,
           y: this.coordinates.y + this.size.height
         }
       },
-      DOWN: {
-        RIGHT: {
+      [DOWN]: {
+        [RIGHT]: {
           x: this.coordinates.x + this.size.width,
           y: this.coordinates.y
         },
-        LEFT: { x: this.coordinates.x, y: this.coordinates.y }
+        [LEFT]: { x: this.coordinates.x, y: this.coordinates.y }
       }
     };
     let new_other = {
-      UP: {
-        RIGHT: { x: other.coordinates.x, y: other.coordinates.y },
-        LEFT: {
+      [UP]: {
+        [RIGHT]: { x: other.coordinates.x, y: other.coordinates.y },
+        [LEFT]: {
           x: other.coordinates.x + other.size.width,
           y: other.coordinates.y
         }
       },
-      DOWN: {
-        RIGHT: {
+      [DOWN]: {
+        [RIGHT]: {
           x: other.coordinates.x,
           y: other.coordinates.y + other.size.height
         },
-        LEFT: {
+        [LEFT]: {
           x: other.coordinates.x + other.size.width,
           y: other.coordinates.y + other.size.height
         }
       }
     };
-    if (isVerticalCollision === DOWN && this.speed[UP] < 0) {
+    if (isVerticalCollision === DOWN && this.speed[1] < 0) {
       return isVerticalCollision;
     }
     return Math.pow(
-      new_other[isVerticalCollision][isHorizontalCollision].coordinates.x -
-        new_this[isVerticalCollision][isHorizontalCollision].coordinates.x,
-      DOWN
+      new_other[isVerticalCollision][isHorizontalCollision].x -
+        new_this[isVerticalCollision][isHorizontalCollision].x,
+      2
     ) >=
       Math.pow(
-        new_other[isVerticalCollision][isHorizontalCollision].coordinates.y -
-          new_this[isVerticalCollision][isHorizontalCollision].coordinates.y,
-        DOWN
+        new_other[isVerticalCollision][isHorizontalCollision].y -
+          new_this[isVerticalCollision][isHorizontalCollision].y,
+        2
       )
       ? isVerticalCollision
       : isHorizontalCollision;

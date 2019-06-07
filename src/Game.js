@@ -80,7 +80,6 @@ export const startGame = (
 
   socket.addEventListener("message", event => {
     movableObjects.length = 0;
-    console.log(JSON.parse(event.data).length);
     JSON.parse(event.data).forEach(entity =>
       entity && entity.id
         ? movableObjects.push(

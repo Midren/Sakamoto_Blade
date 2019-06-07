@@ -2,7 +2,7 @@ import { GameObject } from "./GameObjects";
 
 export class MovableObject extends GameObject {
   constructor(id, coordinates, size, image, speed) {
-    super(coordinates, speed, image);
+    super(coordinates, size, speed, image);
     this.id = id;
     this.speed = speed;
     this.onGround = false;

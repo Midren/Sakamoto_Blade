@@ -2,7 +2,7 @@ import { MovableObject } from "./MovableObject";
 
 export class Player extends MovableObject {
   constructor(id, coordinates, size, images, speed, direction) {
-    super(id, coordinates, size, images["0l.png"], speed);
+    super(id, coordinates, size, images["img/player/0l.png"], speed);
     this.images = images;
     this.direction = direction;
     this.hitPoints = 3;
