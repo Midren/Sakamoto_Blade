@@ -4,7 +4,7 @@
   "description": "2D game with platform and shooting aspects",
   "main": "dist/bundle.js",
   "scripts": {
-    "start": "concurrently \"webpack --watch\" \"node dist/bundle-server.js\"",
+    "start": "concurrently \"webpack --watch\" \"nodemon dist/bundle-server.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -33,6 +33,7 @@
   "devDependencies": {
     "concurrently": "^4.1.0",
     "file-loader": "^4.0.0",
+    "nodemon": "^1.19.1",
     "ttf-loader": "^1.0.2",
     "webpack-cli": "^3.3.2"
   }
