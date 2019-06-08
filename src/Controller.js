@@ -33,7 +33,7 @@ export const keyHandler = (keyStatus, player, bullets) => {
 };
 
 let shooting = { is_allowed: true };
-const allowShoot = can_shoot => (shooting.is_allowed = true);
+const allowShoot = shooting => (shooting.is_allowed = true);
 
 export const keyController = (keyHelper, bool, e) => {
   switch (e.code) {
