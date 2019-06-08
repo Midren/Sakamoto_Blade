@@ -11,6 +11,9 @@ const activateGameField = () => {
   Object.values(document.querySelectorAll(".game-field__canvas")).map(val =>
     val.classList.remove("game-field__canvas_disabled")
   );
+  // document
+  //   .querySelector(".game-field__canvas")
+  //   .classList.remove("game-field__canvas_disabled");
 };
 
 const showGameOver = () => {
