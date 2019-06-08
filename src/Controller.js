@@ -34,20 +34,17 @@ export const keyHandler = (keyStatus, player, bullets) => {
 let shooting = { is_allowed: true };
 const allowShoot = shooting => (shooting.is_allowed = true);
 
-const keyController = (keyHelper, bool, e) => {
+export const wasdKeyController = (keyHelper, bool, e) => {
   switch (e.code) {
     case "KeyA":
-    case "ArrowLeft":
       e.preventDefault();
       keyHelper.left = bool;
       break;
     case "KeyD":
-    case "ArrowRight":
       e.preventDefault();
       keyHelper.right = bool;
       break;
     case "KeyW":
-    case "ArrowUp":
       e.preventDefault();
       keyHelper.up = bool;
       break;
@@ -56,6 +53,38 @@ const keyController = (keyHelper, bool, e) => {
       keyHelper.hit = bool;
       break;
     case "Space":
+      e.preventDefault();
+      if (shooting.is_allowed && bool === true) {
+        keyHelper.shoot = bool;
+        shooting.is_allowed = false;
+        setTimeout(allowShoot.bind(null, shooting), 500);
+      } else {
+        keyHelper.shoot = false;
+      }
+      break;
+    default:
+      break;
+  }
+};
+
+export const arrowKeyController = (keyHelper, bool, e) => {
+  switch (e.code) {
+    case "ArrowLeft":
+      e.preventDefault();
+      keyHelper.left = bool;
+      break;
+    case "ArrowRight":
+      e.preventDefault();
+      keyHelper.right = bool;
+      break;
+    case "ArrowUp":
+      e.preventDefault();
+      keyHelper.up = bool;
+      break;
+    case "KeyK":
+      e.preventDefault();
+      keyHelper.hit = bool;
+      break;
     case "KeyJ":
       e.preventDefault();
       if (shooting.is_allowed && bool === true) {
@@ -71,7 +100,7 @@ const keyController = (keyHelper, bool, e) => {
   }
 };
 
-export const activateKeyboardInput = (socket, keyStatus) => {
+export const activateKeyboardInput = (socket, keyStatus, keyController) => {
   document.onkeydown = keyController.bind(null, keyStatus, true);
   document.onkeyup = keyController.bind(null, keyStatus, false);
 

@@ -5,12 +5,12 @@ import { playTrack, backGroundAnimation, getSong } from "./media";
 import { generateMap } from "./field";
 
 const activateGameField = () => {
-  document
-    .getElementsByClassName("game-field__game-status")[0]
-    .classList.add("game-field__game-status_disabled");
-  document
-    .getElementsByClassName("game-field__canvas")[0]
-    .classList.remove("game-field__canvas_disabled");
+  Object.values(document.querySelectorAll(".game-field__game-status")).map(
+    val => val.classList.add("game-field__game-status_disabled")
+  );
+  Object.values(document.querySelectorAll(".game-field__canvas")).map(val =>
+    val.classList.remove("game-field__canvas_disabled")
+  );
 };
 
 const showGameOver = () => {
@@ -88,6 +88,7 @@ const render = (ctx, movableObjects, field, background, keyStatus) => {
 export const startGame = (
   ctx,
   socket,
+  keyController,
   [playerImgs, blocksImg, backgroundImg]
 ) => {
   const audioCtx = new AudioContext();
@@ -111,7 +112,7 @@ export const startGame = (
   let movableObjects = [];
   let field = generateMap(ctx.canvas.width, 50, platformSprite);
 
-  activateKeyboardInput(socket, keyStatus);
+  activateKeyboardInput(socket, keyStatus, keyController);
   startListenFromServer(socket, movableObjects);
 
   let background = backGroundAnimation(ctx, backgroundImg);
