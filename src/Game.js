@@ -2,7 +2,7 @@ import { keyController } from "./Controller";
 import { Bullet } from "./Bullet";
 import { Player } from "./Player";
 import { playTrack, backGroundAnimation, getSong } from "./media";
-import { generate_map } from "./field";
+import { generateMap } from "./field";
 
 const activateGameField = () => {
   document
@@ -18,7 +18,7 @@ const gameOver = () => {
     .getElementsByClassName("game-field__canvas")[0]
     .classList.add("game-field__canvas_disabled");
   document.getElementsByClassName("game-field__loading-screen")[0].src =
-    "game_over.jpg";
+    "img/game_over.jpg";
   document
     .getElementsByClassName("game-field__loading-screen")[0]
     .classList.remove("game-field__loading-screen_disabled");
@@ -98,7 +98,9 @@ export const startGame = (
   [playerImg, blocksImg, backgroundImg]
 ) => {
   const audioCtx = new AudioContext();
-  const soundtrack = getSong(audioCtx, "music/MOON_Dust.ogg");
+  getSong(audioCtx, "music/MOON_Dust.ogg").then(song =>
+    playTrack(audioCtx, song)
+  );
   const [platformSprite, lavaSprite] = blocksImg;
 
   activateGameField();
@@ -110,8 +112,10 @@ export const startGame = (
     hit: false,
     shoot: false
   };
+
   let movableObjects = [];
-  let field = generate_map(platformSprite);
+  let field = generateMap(ctx.canvas.width, 50, platformSprite);
+
   document.onkeydown = keyController.bind(null, keyStatus, true);
   document.onkeyup = keyController.bind(null, keyStatus, false);
 
@@ -120,13 +124,8 @@ export const startGame = (
     keyStatus.shoot = false;
   });
 
-  let background = { image: backgroundImg[0] };
-  let counter = { n: 0 };
-
-  backGroundAnimation(ctx, backgroundImg, background, counter);
-  soundtrack.then(song => playTrack(audioCtx, song));
+  let background = backGroundAnimation(ctx, backgroundImg);
   startListenFromServer(movableObjects, socket, [playerImg, lavaSprite]);
-  socket.addEventListener("game_over", () => console.log("BLEEET"));
 
   render(ctx, movableObjects, field, background, keyStatus);
 };

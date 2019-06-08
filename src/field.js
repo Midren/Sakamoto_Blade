@@ -20,10 +20,8 @@ export const fieldBlueprint =
 const PLATFORM = "#";
 const EMPTY = ".";
 
-export const generate_map = blockImg => {
-  const cellSize = 50;
-  const width = 1200;
-  return fieldBlueprint
+export const generateMap = (width, cellSize, blockImg) =>
+  fieldBlueprint
     .split("")
     .map((val, ind) =>
       val === PLATFORM
@@ -38,4 +36,3 @@ export const generate_map = blockImg => {
         : null
     )
     .filter(val => val);
-};

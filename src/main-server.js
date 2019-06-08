@@ -1,6 +1,6 @@
 import { Player } from "./Player";
 import { keyHandler } from "./Controller";
-import { generate_map } from "./field";
+import { generateMap } from "./field";
 import {
   handleCollisions,
   moveObjects,
@@ -22,7 +22,7 @@ const port = 3000;
 const wsServer = new WebSocket.Server({ server });
 
 let players = [];
-let field = generate_map(null);
+let field = generateMap(1200, 50, null);
 let bullets = [];
 let playerId = 0;
 

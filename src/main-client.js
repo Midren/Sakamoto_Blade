@@ -8,8 +8,9 @@ import {
 import { startGame } from "./Game";
 
 const socket = new WebSocket("ws://127.0.0.1:3000");
-const canvas = document.getElementsByClassName("game-field__canvas")[0];
-const ctx = canvas.getContext("2d");
+const ctx = document
+  .getElementsByClassName("game-field__canvas")[0]
+  .getContext("2d");
 
 const PlayerImg = loadImgsAsKeyValue(playerImagesSrc);
 const BlocksImg = loadImages(blocksImagesSrc);
