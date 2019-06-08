@@ -8,16 +8,17 @@ import {
 import { startGame } from "./Game";
 
 const socket = new WebSocket("ws://127.0.0.1:3000");
-const ctx = document
-  .getElementsByClassName("game-field__canvas")[0]
-  .getContext("2d");
+const ctx = document.querySelector(".game-field__canvas").getContext("2d");
 
 const PlayerImg = loadImgsAsKeyValue(playerImagesSrc);
 const BlocksImg = loadImages(blocksImagesSrc);
 const BackgroundImg = loadImages(backgroundImagesSrc);
 
-socket.addEventListener("open", event => {
-  Promise.all([PlayerImg, BlocksImg, BackgroundImg])
-    .then(values => startGame(ctx, socket, values))
-    .catch(error => console.log(error));
+socket.addEventListener("open", async event => {
+  try {
+    const values = await Promise.all([PlayerImg, BlocksImg, BackgroundImg]);
+    startGame(ctx, socket, values);
+  } catch (error) {
+    console.log(error);
+  }
 });
