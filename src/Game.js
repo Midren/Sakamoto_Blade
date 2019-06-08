@@ -38,7 +38,6 @@ const startListenFromServer = (socket, movableObjects) =>
               entity.id,
               entity.coordinates,
               { height: 50, width: 50 },
-              Player.img,
               { x: 1, y: 0 },
               entity.direction
             )
@@ -46,10 +45,9 @@ const startListenFromServer = (socket, movableObjects) =>
         : entity && !entity.id
         ? movableObjects.push(
             new Bullet(
-              0,
+              entity.id,
               entity.coordinates,
               { height: 18, width: 5 },
-              Bullet.img,
               { x: entity.direction * 40, y: 0 }
             )
           )

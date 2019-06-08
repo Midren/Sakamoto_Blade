@@ -25,7 +25,6 @@ export const keyHandler = (keyStatus, player, bullets) => {
         0,
         { x: x, y: player.coordinates.y + player.size.height / 2.5 },
         { height: 18, width: 5 },
-        null,
         { x: player.direction * 40, y: 0 }
       )
     );

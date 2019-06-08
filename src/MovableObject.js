@@ -5,7 +5,7 @@ const UP = 1,
   LEFT = 4;
 
 export class MovableObject extends GameObject {
-  constructor(id, coordinates, size, image, speed) {
+  constructor(id, coordinates, size, speed, image) {
     super(coordinates, size, image);
     this.id = id;
     this.speed = speed;

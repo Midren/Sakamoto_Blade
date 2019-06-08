@@ -46,7 +46,6 @@ wsServer.on("connection", (ws, req) => {
     ws.id,
     { x: 120, y: 180 },
     { height: 50, width: 50 },
-    null,
     { x: 0, y: 0 },
     1
   );

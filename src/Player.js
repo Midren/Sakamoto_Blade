@@ -1,13 +1,13 @@
 import { MovableObject } from "./MovableObject";
 
 export class Player extends MovableObject {
-  constructor(id, coordinates, size, images, speed, direction) {
+  constructor(id, coordinates, size, speed, direction, images = Player.img) {
     super(
       id,
       coordinates,
       size,
-      images ? images["img/player/0l.png"] : null,
-      speed
+      speed,
+    images ? images["img/player/0l.png"] : null,
     );
     this.images = images;
     this.direction = direction;
