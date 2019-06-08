@@ -29,6 +29,7 @@ const startListenFromServer = (socket, movableObjects) =>
   socket.addEventListener("message", event => {
     movableObjects.length = 0;
     if (event.data === "game_over") {
+      socket.close();
       showGameOver();
       return;
     }

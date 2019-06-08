@@ -1,12 +1,11 @@
 import {
-  loadImgsAsKeyValue,
   loadImages,
   playerImagesSrc,
   blocksImagesSrc,
   backgroundImagesSrc
 } from "./media";
 import { startGame } from "./Game";
-import { arrowKeyController, wasdKeyController } from "./Controller";
+import { wasdKeyController, arrowKeyController } from "./Controller";
 const host = "127.0.0.1";
 const port = "3000";
 
@@ -15,11 +14,12 @@ const ctxs = Object.values(
 ).map(val => val.getContext("2d"));
 
 const sockets = ctxs.map(() => new WebSocket(`ws://${host}:${port}`));
+
 const keyControllers = ctxs.map((val, ind) =>
   ind % 2 ? wasdKeyController : arrowKeyController
 );
 
-const PlayerImg = loadImgsAsKeyValue(playerImagesSrc);
+const PlayerImg = loadImages(playerImagesSrc);
 const BlocksImg = loadImages(blocksImagesSrc);
 const BackgroundImg = loadImages(backgroundImagesSrc);
 
