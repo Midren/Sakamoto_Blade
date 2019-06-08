@@ -22,7 +22,7 @@ const port = 3000;
 const wsServer = new WebSocket.Server({ server });
 
 let players = [];
-let field = generateMap(1200, 50, null);
+let field = generateMap(900, 37.5, null);
 let bullets = [];
 let playerId = 0;
 
@@ -45,7 +45,7 @@ wsServer.on("connection", (ws, req) => {
   players[ws.id] = new Player(
     ws.id,
     { x: 120, y: 180 },
-    { height: 50, width: 50 },
+    { height: 37.5, width: 37.5 },
     { x: 0, y: 0 },
     1
   );

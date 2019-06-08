@@ -1,18 +1,16 @@
-.game-field__game-status {
+.game-field {
   display: flex;
+  justify-content: center;
+}
+.game-field__game-status {
   margin: 0 auto;
 }
 .game-field__game-status_disabled {
   display: none;
-  margin: 0 auto;
 }
 .game-field__canvas {
-  display: flex;
-  margin: 0 auto;
   border: 1px solid black;
 }
 .game-field__canvas_disabled {
   display: none;
-  margin: 0 auto;
 }
-/*# sourceMappingURL=game-field.css.map */
