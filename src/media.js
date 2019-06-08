@@ -48,30 +48,8 @@ export const loadImgsAsKeyValue = async imagesSrc => {
 
 export const playerImagesSrc = [
   "img/player/0l.png",
-  "img/player/atkL2.png",
-  "img/player/atkR3.png",
   "img/player/l1.png",
-  "img/player/l5.png",
-  "img/player/r2.png",
-  "img/player/r6.png",
-  "img/player/0.png",
-  "img/player/atkL3.png",
-  "img/player/jl.png",
-  "img/player/l2.png",
-  "img/player/l6.png",
-  "img/player/r3.png",
-  "img/player/0r.png",
-  "img/player/atkR1.png",
-  "img/player/j.png",
-  "img/player/l3.png",
-  "img/player/Pistol.png",
-  "img/player/r4.png",
-  "img/player/atkL1.png",
-  "img/player/atkR2.png",
-  "img/player/jr.png",
-  "img/player/l4.png",
-  "img/player/r1.png",
-  "img/player/r5.png"
+  "img/player/r1.png"
 ];
 
 export const blocksImagesSrc = [

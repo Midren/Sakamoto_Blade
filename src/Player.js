@@ -7,7 +7,7 @@ export class Player extends MovableObject {
       coordinates,
       size,
       speed,
-      images ? images["img/player/0l.png"] : null
+      images ? images[0] : null
     );
     this.images = images;
     this.direction = direction;
@@ -29,9 +29,9 @@ export class Player extends MovableObject {
       this.coordinates.y
     );
     if (this.direction === -1 && this.speed.x) {
-      this.image = this.images["img/player/l1.png"];
+      this.image = this.images[1];
     } else if (this.direction === 1 && this.speed.x) {
-      this.image = this.images["img/player/r1.png"];
+      this.image = this.images[2];
     }
     super.render(ctx);
   }
