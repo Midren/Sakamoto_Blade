@@ -19,12 +19,12 @@ export class MovableObject extends GameObject {
 
     if (this.speed.y < 0) {
       [this.speed.x, this.speed.y] = Object.values(this.speed).map(val =>
-        Math.abs(val * 0.7) < 1 ? 0 : val * 0.7
+        Math.abs(val * 0.8) < 1 ? 0 : val * 0.8
       );
-      this.speed.y = this.speed.y === 0 ? 15 : this.speed.y;
+      this.speed.y = this.speed.y === 0 ? 8 : this.speed.y;
     } else {
-      this.speed.x = Math.abs(this.speed.x * 0.7) < 1 ? 0 : this.speed.x * 0.7;
-      this.speed.y = 15;
+      this.speed.x = Math.abs(this.speed.x * 0.8) < 1 ? 0 : this.speed.x * 0.8;
+      this.speed.y = 8;
     }
   }
   onCollision(other) {
