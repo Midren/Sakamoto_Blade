@@ -98,9 +98,9 @@ const render = (ctx, movableObjects, field, background, keyStatus) => {
 
   render();
 };
+let _GAME_INSTANCES_NUMBER = 1;
 
 export class Game {
-  static GAME_INSTANCES_NUMBER = 1;
   constructor(container, keyController) {
     this.container = container;
     let canvas = document.createElement("canvas");
@@ -112,7 +112,7 @@ export class Game {
     container.appendChild(canvas);
     this.ctx = canvas.getContext("2d");
     this.keyController = keyController;
-    this.id = Game.GAME_INSTANCES_NUMBER++;
+    this.id = _GAME_INSTANCES_NUMBER++;
 
     if (!Game.playerImg) {
       Game.playerImg = loadImages(playerImagesSrc);
@@ -127,7 +127,13 @@ export class Game {
         this.socket = new WebSocket(`ws://${host}:${port}`);
         this.socket.addEventListener("open", () => {
           try {
-            startGame(this.ctx, this.socket, this.keyController, values, this.id);
+            startGame(
+              this.ctx,
+              this.socket,
+              this.keyController,
+              values,
+              this.id
+            );
           } catch (error) {
             console.log(error);
           }
