@@ -1,7 +1,7 @@
 import { activateKeyboardInput } from "./Controller";
 import { Bullet } from "./Bullet";
 import { Player } from "./Player";
-import { playTrack, backGroundAnimation, getSong } from "./media";
+import { backGroundAnimation } from "./media";
 import {
   generateMap,
   FIELD_WIDTH,
@@ -121,23 +121,14 @@ export class Game {
     }
   }
 
-  start(host, port) {
+  start(socket) {
     Promise.all([Game.playerImg, Game.blocksImg, Game.backgroundImg]).then(
       values => {
-        this.socket = new WebSocket(`ws://${host}:${port}`);
-        this.socket.addEventListener("open", () => {
-          try {
-            startGame(
-              this.ctx,
-              this.socket,
-              this.keyController,
-              values,
-              this.id
-            );
-          } catch (error) {
-            console.log(error);
-          }
-        });
+        try {
+          startGame(this.ctx, socket, this.keyController, values, this.id);
+        } catch (error) {
+          console.log(error);
+        }
       }
     );
   }
@@ -150,10 +141,6 @@ const startGame = (
   [playerImgs, blocksImg, backgroundImg],
   id
 ) => {
-  const audioCtx = new AudioContext();
-  getSong(audioCtx, "music/MOON_Dust.ogg").then(song =>
-    playTrack(audioCtx, song)
-  );
   const [platformSprite, lavaSprite] = blocksImg;
   Bullet.img = lavaSprite;
   Player.img = playerImgs;
