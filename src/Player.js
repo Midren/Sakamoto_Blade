@@ -7,7 +7,7 @@ export class Player extends MovableObject {
       coordinates,
       size,
       speed,
-    images ? images["img/player/0l.png"] : null,
+      images ? images["img/player/0l.png"] : null
     );
     this.images = images;
     this.direction = direction;

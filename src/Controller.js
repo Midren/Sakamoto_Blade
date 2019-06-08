@@ -101,8 +101,14 @@ export const arrowKeyController = (keyHelper, bool, e) => {
 };
 
 export const activateKeyboardInput = (socket, keyStatus, keyController) => {
-  document.onkeydown = keyController.bind(null, keyStatus, true);
-  document.onkeyup = keyController.bind(null, keyStatus, false);
+  document.addEventListener(
+    "keydown",
+    keyController.bind(null, keyStatus, true)
+  );
+  document.addEventListener(
+    "keyup",
+    keyController.bind(null, keyStatus, false)
+  );
 
   window.addEventListener("pressed", () => {
     socket.send(JSON.stringify(keyStatus));
