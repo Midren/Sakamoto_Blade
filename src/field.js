@@ -22,7 +22,8 @@ const EMPTY = ".";
 
 export const FIELD_WIDTH = 900;
 export const FIELD_HEIGHT = 525;
-export const CELL_SIZE = FIELD_WIDTH / 24;
+export const CELL_WIDTH = FIELD_WIDTH / 24;
+export const CELL_HEIGHT = FIELD_HEIGHT / 14;
 
 export const generateMap = blockImg => {
   return fieldBlueprint
@@ -31,10 +32,10 @@ export const generateMap = blockImg => {
       val === PLATFORM
         ? new GameObject(
             {
-              x: (ind % (FIELD_WIDTH / CELL_SIZE)) * CELL_SIZE,
-              y: Math.floor((ind / FIELD_WIDTH) * CELL_SIZE) * CELL_SIZE
+              x: (ind % (FIELD_WIDTH / CELL_WIDTH)) * CELL_WIDTH,
+              y: Math.floor((ind / FIELD_WIDTH) * CELL_WIDTH) * CELL_HEIGHT
             },
-            { height: CELL_SIZE, width: CELL_SIZE },
+            { height: CELL_HEIGHT, width: CELL_WIDTH },
             blockImg
           )
         : null

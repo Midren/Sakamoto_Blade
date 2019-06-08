@@ -1,6 +1,6 @@
 import { Player } from "./Player";
 import { keyHandler } from "./Controller";
-import { generateMap, CELL_SIZE } from "./field";
+import { generateMap, CELL_WIDTH, CELL_HEIGHT } from "./field";
 import {
   handleCollisions,
   moveObjects,
