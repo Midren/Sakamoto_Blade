@@ -53,7 +53,7 @@ wsServer.on("connection", (ws, req) => {
   ws.on("message", message => {
     let player = players[ws.id];
     if (!player) {
-      //TODO: Send Game Over screen;
+      ws.send("game_over");
       return;
     }
     keyHandler(JSON.parse(message), player, bullets);

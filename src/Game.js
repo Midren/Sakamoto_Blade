@@ -4,6 +4,26 @@ import { Player } from "./Player";
 import { playTrack, backGroundAnimation, getSong } from "./media";
 import { generate_map } from "./field";
 
+const activateGameField = () => {
+  document
+    .getElementsByClassName("game-field__loading-screen")[0]
+    .classList.add("game-field__loading-screen_disabled");
+  document
+    .getElementsByClassName("game-field__canvas")[0]
+    .classList.remove("game-field__canvas_disabled");
+};
+
+const gameOver = () => {
+  document
+    .getElementsByClassName("game-field__canvas")[0]
+    .classList.add("game-field__canvas_disabled");
+  document.getElementsByClassName("game-field__loading-screen")[0].src =
+    "game_over.jpg";
+  document
+    .getElementsByClassName("game-field__loading-screen")[0]
+    .classList.remove("game-field__loading-screen_disabled");
+};
+
 const startListenFromServer = (
   movableObjects,
   socket,
@@ -11,6 +31,11 @@ const startListenFromServer = (
 ) =>
   socket.addEventListener("message", event => {
     movableObjects.length = 0;
+    if (event.data === "game_over") {
+      console.log("GAME OVER");
+      gameOver();
+      return;
+    }
     JSON.parse(event.data).forEach(entity =>
       entity && entity.id
         ? movableObjects.push(
@@ -36,15 +61,6 @@ const startListenFromServer = (
         : null
     );
   });
-
-const activateGameField = () => {
-  document
-    .getElementsByClassName("game-field__loading-screen")[0]
-    .classList.add("game-field__loading-screen_disabled");
-  document
-    .getElementsByClassName("game-field__canvas")[0]
-    .classList.remove("game-field__canvas_disabled");
-};
 
 const clear = ctx => ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
@@ -110,5 +126,7 @@ export const startGame = (
   backGroundAnimation(ctx, backgroundImg, background, counter);
   soundtrack.then(song => playTrack(audioCtx, song));
   startListenFromServer(movableObjects, socket, [playerImg, lavaSprite]);
+  socket.addEventListener("game_over", () => console.log("BLEEET"));
+
   render(ctx, movableObjects, field, background, keyStatus);
 };
