@@ -2,7 +2,7 @@ import { activateKeyboardInput } from "./Controller";
 import { Bullet } from "./Bullet";
 import { Player } from "./Player";
 import { playTrack, backGroundAnimation, getSong } from "./media";
-import { generateMap } from "./field";
+import { generateMap, FIELD_WIDTH, FIELD_HEIGHT, CELL_SIZE } from "./field";
 
 const activateGameField = () => {
   document
@@ -10,12 +10,9 @@ const activateGameField = () => {
     .classList.add("game-field__game-status_disabled");
   Object.values(document.querySelectorAll(".game-field__canvas")).map(val => {
     val.classList.remove("game-field__canvas_disabled");
-    val.setAttribute("height", "525");
-    val.setAttribute("width", "900");
+    val.setAttribute("height", FIELD_HEIGHT);
+    val.setAttribute("width", FIELD_WIDTH);
   });
-  // document
-  //   .querySelector(".game-field__canvas")
-  //   .classList.remove("game-field__canvas_disabled");
 };
 
 const showGameOver = () => {
@@ -41,7 +38,7 @@ const startListenFromServer = (socket, movableObjects) =>
             new Player(
               entity.id,
               entity.coordinates,
-              { height: 37.5, width: 37.5 },
+              { height: CELL_SIZE, width: CELL_SIZE },
               { x: 1, y: 0 },
               entity.direction
             )
@@ -114,7 +111,7 @@ export const startGame = (
   };
 
   let movableObjects = [];
-  let field = generateMap(ctx.canvas.width, 37.5, platformSprite);
+  let field = generateMap(platformSprite);
 
   activateKeyboardInput(socket, keyStatus, keyController);
   startListenFromServer(socket, movableObjects);
