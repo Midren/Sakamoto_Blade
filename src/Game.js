@@ -37,38 +37,6 @@ const showGameOver = () => {
     .classList.remove("game-field__game-status_disabled");
 };
 
-const startListenFromServer = (socket, movableObjects) =>
-  socket.addEventListener("message", event => {
-    movableObjects.length = 0;
-    if (event.data === "game_over") {
-      socket.close();
-      showGameOver();
-      return;
-    }
-    JSON.parse(event.data).forEach(entity =>
-      entity && entity.id
-        ? movableObjects.push(
-            new Player(
-              entity.id,
-              entity.coordinates,
-              { height: CELL_HEIGHT, width: CELL_WIDTH },
-              { x: 1, y: 0 },
-              entity.direction
-            )
-          )
-        : entity && !entity.id
-        ? movableObjects.push(
-            new Bullet(
-              entity.id,
-              entity.coordinates,
-              { height: 18, width: 5 },
-              { x: entity.direction * 40, y: 0 }
-            )
-          )
-        : null
-    );
-  });
-
 const clear = ctx => ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
 const drawImage = (ctx, image, options = {}) => {
@@ -84,20 +52,6 @@ const drawImage = (ctx, image, options = {}) => {
   ctx.drawImage(image, x, y, width, height);
 };
 
-const render = (ctx, movableObjects, field, background, keyStatus) => {
-  const render = () => {
-    clear(ctx);
-    drawImage(ctx, background.image);
-
-    if (Object.values(keyStatus).some(val => val))
-      window.dispatchEvent(new Event("pressed"));
-
-    [...field, ...movableObjects].forEach(obj => obj.render(ctx));
-    requestAnimationFrame(render);
-  };
-
-  render();
-};
 let _GAME_INSTANCES_NUMBER = 1;
 
 export class Game {
@@ -122,10 +76,10 @@ export class Game {
   }
 
   start(socket) {
+    this.socket = socket;
     Promise.all([Game.playerImg, Game.blocksImg, Game.backgroundImg]).then(
       values => {
         try {
-          // _startGame(this.ctx, socket, this.keyController, values, this.id);
           const [playerImgs, blocksImg, backgroundImg] = values;
           const [platformSprite, lavaSprite] = blocksImg;
           Bullet.img = lavaSprite;
@@ -145,15 +99,65 @@ export class Game {
           let field = generateMap(platformSprite);
 
           activateKeyboardInput(socket, keyStatus, this.keyController, this.id);
-          startListenFromServer(socket, movableObjects);
+          this.startListenFromServer(movableObjects);
 
           let background = backGroundAnimation(this.ctx, backgroundImg);
-          socket.send(JSON.stringify({ player_id: this.id, keyStatus: keyStatus }));
-          render(this.ctx, movableObjects, field, background, keyStatus);
+          socket.send(
+            JSON.stringify({ player_id: this.id, keyStatus: keyStatus })
+          );
+          this.render(movableObjects, field, background, keyStatus);
         } catch (error) {
           console.log(error);
         }
       }
     );
+  }
+
+  render(movableObjects, field, background, keyStatus) {
+    const render = () => {
+      clear(this.ctx);
+      drawImage(this.ctx, background.image);
+
+      if (Object.values(keyStatus).some(val => val))
+        window.dispatchEvent(new Event("pressed"));
+
+      [...field, ...movableObjects].forEach(obj => obj.render(this.ctx));
+      requestAnimationFrame(render);
+    };
+
+    render();
+  }
+
+  startListenFromServer(movableObjects) {
+    this.socket.addEventListener("message", event => {
+      movableObjects.length = 0;
+      if (event.data === "game_over") {
+        this.socket.close();
+        showGameOver();
+        return;
+      }
+      JSON.parse(event.data).forEach(entity =>
+        entity && entity.id
+          ? movableObjects.push(
+              new Player(
+                entity.id,
+                entity.coordinates,
+                { height: CELL_HEIGHT, width: CELL_WIDTH },
+                { x: 1, y: 0 },
+                entity.direction
+              )
+            )
+          : entity && !entity.id
+          ? movableObjects.push(
+              new Bullet(
+                entity.id,
+                entity.coordinates,
+                { height: 18, width: 5 },
+                { x: entity.direction * 40, y: 0 }
+              )
+            )
+          : null
+      );
+    });
   }
 }
