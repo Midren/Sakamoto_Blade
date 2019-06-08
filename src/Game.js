@@ -6,34 +6,29 @@ import { generateMap } from "./field";
 
 const activateGameField = () => {
   document
-    .getElementsByClassName("game-field__loading-screen")[0]
-    .classList.add("game-field__loading-screen_disabled");
+    .getElementsByClassName("game-field__game-status")[0]
+    .classList.add("game-field__game-status_disabled");
   document
     .getElementsByClassName("game-field__canvas")[0]
     .classList.remove("game-field__canvas_disabled");
 };
 
-const gameOver = () => {
+const showGameOver = () => {
   document
     .getElementsByClassName("game-field__canvas")[0]
     .classList.add("game-field__canvas_disabled");
-  document.getElementsByClassName("game-field__loading-screen")[0].src =
+  document.getElementsByClassName("game-field__game-status")[0].src =
     "img/game_over.jpg";
   document
-    .getElementsByClassName("game-field__loading-screen")[0]
-    .classList.remove("game-field__loading-screen_disabled");
+    .getElementsByClassName("game-field__game-status")[0]
+    .classList.remove("game-field__game-status_disabled");
 };
 
-const startListenFromServer = (
-  movableObjects,
-  socket,
-  [playerImg, lavaSprite]
-) =>
+const startListenFromServer = (socket, movableObjects) =>
   socket.addEventListener("message", event => {
     movableObjects.length = 0;
     if (event.data === "game_over") {
-      console.log("GAME OVER");
-      gameOver();
+      showGameOver();
       return;
     }
     JSON.parse(event.data).forEach(entity =>
@@ -41,9 +36,9 @@ const startListenFromServer = (
         ? movableObjects.push(
             new Player(
               entity.id,
-              { x: entity.x, y: entity.y },
+              entity.coordinates,
               { height: 50, width: 50 },
-              playerImg,
+              Player.img,
               { x: 1, y: 0 },
               entity.direction
             )
@@ -52,15 +47,25 @@ const startListenFromServer = (
         ? movableObjects.push(
             new Bullet(
               0,
-              { x: entity.x, y: entity.y },
+              entity.coordinates,
               { height: 18, width: 5 },
-              lavaSprite,
+              Bullet.img,
               { x: entity.direction * 40, y: 0 }
             )
           )
         : null
     );
   });
+
+const activateKeyboardInput = (socket, keyController, keyStatus) => {
+  document.onkeydown = keyController.bind(null, keyStatus, true);
+  document.onkeyup = keyController.bind(null, keyStatus, false);
+
+  window.addEventListener("pressed", () => {
+    socket.send(JSON.stringify(keyStatus));
+    keyStatus.shoot = false;
+  });
+};
 
 const clear = ctx => ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
@@ -83,7 +88,7 @@ const render = (ctx, movableObjects, field, background, keyStatus) => {
     drawImage(ctx, background.image);
 
     if (Object.values(keyStatus).some(val => val))
-      ctx.canvas.dispatchEvent(new Event("pressed"));
+      window.dispatchEvent(new Event("pressed"));
 
     [...field, ...movableObjects].forEach(obj => obj.render(ctx));
     requestAnimationFrame(render);
@@ -95,13 +100,15 @@ const render = (ctx, movableObjects, field, background, keyStatus) => {
 export const startGame = (
   ctx,
   socket,
-  [playerImg, blocksImg, backgroundImg]
+  [playerImgs, blocksImg, backgroundImg]
 ) => {
   const audioCtx = new AudioContext();
   getSong(audioCtx, "music/MOON_Dust.ogg").then(song =>
     playTrack(audioCtx, song)
   );
   const [platformSprite, lavaSprite] = blocksImg;
+  Bullet.img = lavaSprite;
+  Player.img = playerImgs;
 
   activateGameField();
 
@@ -116,16 +123,9 @@ export const startGame = (
   let movableObjects = [];
   let field = generateMap(ctx.canvas.width, 50, platformSprite);
 
-  document.onkeydown = keyController.bind(null, keyStatus, true);
-  document.onkeyup = keyController.bind(null, keyStatus, false);
-
-  ctx.canvas.addEventListener("pressed", () => {
-    socket.send(JSON.stringify(keyStatus));
-    keyStatus.shoot = false;
-  });
+  activateKeyboardInput(socket, keyController, keyStatus);
+  startListenFromServer(socket, movableObjects);
 
   let background = backGroundAnimation(ctx, backgroundImg);
-  startListenFromServer(movableObjects, socket, [playerImg, lavaSprite]);
-
   render(ctx, movableObjects, field, background, keyStatus);
 };

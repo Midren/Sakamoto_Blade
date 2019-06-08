@@ -1,8 +1,8 @@
-.game-field__loading-screen {
+.game-field__game-status {
   display: flex;
   margin: 0 auto;
 }
-.game-field__loading-screen_disabled {
+.game-field__game-status_disabled {
   display: none;
   margin: 0 auto;
 }

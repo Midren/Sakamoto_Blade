@@ -31,8 +31,7 @@ export const serializeObjects = objects =>
       obj
         ? {
             id: obj.id,
-            x: obj.coordinates.x,
-            y: obj.coordinates.y,
+            coordinates: obj.coordinates,
             direction: obj.direction
           }
         : null
