@@ -15,6 +15,7 @@ const ctxs = Object.values(
 ).map(val => val.getContext("2d"));
 
 const sockets = ctxs.map(() => new WebSocket(`ws://${host}:${port}`));
+
 const keyControllers = ctxs.map((val, ind) =>
   ind % 2 ? wasdKeyController : arrowKeyController
 );
@@ -23,8 +24,8 @@ const PlayerImg = loadImgsAsKeyValue(playerImagesSrc);
 const BlocksImg = loadImages(blocksImagesSrc);
 const BackgroundImg = loadImages(backgroundImagesSrc);
 
-Promise.all([PlayerImg, BlocksImg, BackgroundImg]).then(values => {
-  sockets.forEach((socket, ind) => {
+sockets.forEach((socket, ind) => {
+  Promise.all([PlayerImg, BlocksImg, BackgroundImg]).then(values => {
     socket.addEventListener("open", () => {
       try {
         startGame(ctxs[ind], socket, keyControllers[ind], values);
