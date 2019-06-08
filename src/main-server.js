@@ -1,6 +1,6 @@
 import { Player } from "./Player";
 import { keyHandler } from "./Controller";
-import { generateMap, CELL_SIZE } from "./field";
+import { generateMap, CELL_WIDTH, CELL_HEIGHT } from "./field";
 import {
   handleCollisions,
   moveObjects,
@@ -45,7 +45,7 @@ wsServer.on("connection", (ws, req) => {
   players[ws.id] = new Player(
       ws.id,
       { x: 120, y: 180 },
-      { height: CELL_SIZE, width: CELL_SIZE },
+      { height: CELL_HEIGHT, width: CELL_WIDTH },
       { x: 0, y: 0 },
       1
   );

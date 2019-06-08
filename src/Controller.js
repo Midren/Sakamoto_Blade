@@ -100,7 +100,7 @@ export const arrowKeyController = (keyHelper, bool, e) => {
   }
 };
 
-export const activateKeyboardInput = (socket, keyStatus, keyController) => {
+export const activateKeyboardInput = (socket, keyStatus, keyController, id) => {
   document.addEventListener(
     "keydown",
     keyController.bind(null, keyStatus, true)
@@ -111,7 +111,7 @@ export const activateKeyboardInput = (socket, keyStatus, keyController) => {
   );
 
   window.addEventListener("pressed", () => {
-    socket.send(JSON.stringify(keyStatus));
+    socket.send(JSON.stringify({ player_id: id, keyStatus: keyStatus }));
     keyStatus.shoot = false;
   });
 };

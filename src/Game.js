@@ -2,7 +2,19 @@ import { activateKeyboardInput } from "./Controller";
 import { Bullet } from "./Bullet";
 import { Player } from "./Player";
 import { playTrack, backGroundAnimation, getSong } from "./media";
-import { generateMap, FIELD_WIDTH, FIELD_HEIGHT, CELL_SIZE } from "./field";
+import {
+  generateMap,
+  FIELD_WIDTH,
+  FIELD_HEIGHT,
+  CELL_WIDTH,
+  CELL_HEIGHT
+} from "./field";
+import {
+  loadImages,
+  playerImagesSrc,
+  blocksImagesSrc,
+  backgroundImagesSrc
+} from "./media";
 
 const activateGameField = () => {
   document
@@ -39,7 +51,7 @@ const startListenFromServer = (socket, movableObjects) =>
             new Player(
               entity.id,
               entity.coordinates,
-              { height: CELL_SIZE, width: CELL_SIZE },
+              { height: CELL_HEIGHT, width: CELL_WIDTH },
               { x: 1, y: 0 },
               entity.direction
             )
@@ -87,11 +99,50 @@ const render = (ctx, movableObjects, field, background, keyStatus) => {
   render();
 };
 
-export const startGame = (
+export class Game {
+  static GAME_INSTANCES_NUMBER = 1;
+  constructor(container, keyController) {
+    this.container = container;
+    let canvas = document.createElement("canvas");
+    canvas.className =
+      container.classList[0] +
+      `__canvas ` +
+      container.classList[0] +
+      `__canvas_disabled`;
+    container.appendChild(canvas);
+    this.ctx = canvas.getContext("2d");
+    this.keyController = keyController;
+    this.id = Game.GAME_INSTANCES_NUMBER++;
+
+    if (!Game.playerImg) {
+      Game.playerImg = loadImages(playerImagesSrc);
+      Game.blocksImg = loadImages(blocksImagesSrc);
+      Game.backgroundImg = loadImages(backgroundImagesSrc);
+    }
+  }
+
+  start(host, port) {
+    Promise.all([Game.playerImg, Game.blocksImg, Game.backgroundImg]).then(
+      values => {
+        this.socket = new WebSocket(`ws://${host}:${port}`);
+        this.socket.addEventListener("open", () => {
+          try {
+            startGame(this.ctx, this.socket, this.keyController, values, this.id);
+          } catch (error) {
+            console.log(error);
+          }
+        });
+      }
+    );
+  }
+}
+
+const startGame = (
   ctx,
   socket,
   keyController,
-  [playerImgs, blocksImg, backgroundImg]
+  [playerImgs, blocksImg, backgroundImg],
+  id
 ) => {
   const audioCtx = new AudioContext();
   getSong(audioCtx, "music/MOON_Dust.ogg").then(song =>
@@ -114,7 +165,7 @@ export const startGame = (
   let movableObjects = [];
   let field = generateMap(platformSprite);
 
-  activateKeyboardInput(socket, keyStatus, keyController);
+  activateKeyboardInput(socket, keyStatus, keyController, id);
   startListenFromServer(socket, movableObjects);
 
   let background = backGroundAnimation(ctx, backgroundImg);
