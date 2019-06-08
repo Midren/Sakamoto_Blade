@@ -36,7 +36,18 @@ const startListenFromServer = (
         : null
     );
   });
+
+const activateGameField = () => {
+  document
+    .getElementsByClassName("game-field__loading-screen")[0]
+    .classList.add("game-field__loading-screen_disabled");
+  document
+    .getElementsByClassName("game-field__canvas")[0]
+    .classList.remove("game-field__canvas_disabled");
+};
+
 const clear = ctx => ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
 const drawImage = (ctx, image, options = {}) => {
   const imgBbox = image;
 
@@ -50,32 +61,26 @@ const drawImage = (ctx, image, options = {}) => {
   ctx.drawImage(image, x, y, width, height);
 };
 
-const render = (ctx, field, movableObjects, keyStatus, background, socket) => {
+const render = (ctx, movableObjects, field, background, keyStatus) => {
   const render = () => {
     clear(ctx);
     drawImage(ctx, background.image);
 
-    socket.send(JSON.stringify(keyStatus));
-    keyStatus.shoot = false;
+    if (Object.values(keyStatus).some(val => val))
+      ctx.canvas.dispatchEvent(new Event("pressed"));
 
-    field.forEach(block => block.render(ctx));
-    movableObjects.forEach(obj => obj.render(ctx));
+    [...field, ...movableObjects].forEach(obj => obj.render(ctx));
     requestAnimationFrame(render);
   };
 
   render();
 };
 
-const activateGameField = () => {
-  document
-    .getElementsByClassName("game-field__loading-screen")[0]
-    .classList.add("game-field__loading-screen_disabled");
-  document
-    .getElementsByClassName("game-field__canvas")[0]
-    .classList.remove("game-field__canvas_disabled");
-};
-
-export const startGame = (ctx, socket, playerImg, blocksImg, backgroundImg) => {
+export const startGame = (
+  ctx,
+  socket,
+  [playerImg, blocksImg, backgroundImg]
+) => {
   const audioCtx = new AudioContext();
   const soundtrack = getSong(audioCtx, "music/MOON_Dust.ogg");
   const [platformSprite, lavaSprite] = blocksImg;
@@ -94,11 +99,16 @@ export const startGame = (ctx, socket, playerImg, blocksImg, backgroundImg) => {
   document.onkeydown = keyController.bind(null, keyStatus, true);
   document.onkeyup = keyController.bind(null, keyStatus, false);
 
+  ctx.canvas.addEventListener("pressed", () => {
+    socket.send(JSON.stringify(keyStatus));
+    keyStatus.shoot = false;
+  });
+
   let background = { image: backgroundImg[0] };
   let counter = { n: 0 };
 
   backGroundAnimation(ctx, backgroundImg, background, counter);
   soundtrack.then(song => playTrack(audioCtx, song));
   startListenFromServer(movableObjects, socket, [playerImg, lavaSprite]);
-  render(ctx, field, movableObjects, keyStatus, background, socket);
+  render(ctx, movableObjects, field, background, keyStatus);
 };

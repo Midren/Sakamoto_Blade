@@ -26,6 +26,20 @@ let field = generate_map(null);
 let bullets = [];
 let playerId = 0;
 
+wsServer.broadcast = data => {
+  wsServer.clients.forEach(client => {
+    client.send(data);
+  });
+};
+
+setInterval(() => {
+  handleCollisions(players, bullets, field);
+  moveObjects([...players, ...bullets]);
+  removeDeadPlayers(players);
+
+  wsServer.broadcast(serializeObjects([...players, ...bullets]));
+}, 1000 / 60);
+
 wsServer.on("connection", (ws, req) => {
   ws.id = ++playerId;
   players[ws.id] = new Player(
@@ -42,13 +56,7 @@ wsServer.on("connection", (ws, req) => {
       //TODO: Send Game Over screen;
       return;
     }
-
     keyHandler(JSON.parse(message), player, bullets);
-    handleCollisions(players, bullets, field);
-    moveObjects([...players, ...bullets]);
-    removeDeadPlayers(players);
-
-    ws.send(serializeObjects([...players, ...bullets]));
   });
 
   ws.on("close", (reasonCode, desc) => {
