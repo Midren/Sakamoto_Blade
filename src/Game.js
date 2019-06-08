@@ -1,4 +1,4 @@
-import { keyController } from "./Controller";
+import { activateKeyboardInput } from "./Controller";
 import { Bullet } from "./Bullet";
 import { Player } from "./Player";
 import { playTrack, backGroundAnimation, getSong } from "./media";
@@ -54,16 +54,6 @@ const startListenFromServer = (socket, movableObjects) =>
         : null
     );
   });
-
-const activateKeyboardInput = (socket, keyController, keyStatus) => {
-  document.onkeydown = keyController.bind(null, keyStatus, true);
-  document.onkeyup = keyController.bind(null, keyStatus, false);
-
-  window.addEventListener("pressed", () => {
-    socket.send(JSON.stringify(keyStatus));
-    keyStatus.shoot = false;
-  });
-};
 
 const clear = ctx => ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
@@ -121,7 +111,7 @@ export const startGame = (
   let movableObjects = [];
   let field = generateMap(ctx.canvas.width, 50, platformSprite);
 
-  activateKeyboardInput(socket, keyController, keyStatus);
+  activateKeyboardInput(socket, keyStatus);
   startListenFromServer(socket, movableObjects);
 
   let background = backGroundAnimation(ctx, backgroundImg);

@@ -34,7 +34,7 @@ export const keyHandler = (keyStatus, player, bullets) => {
 let shooting = { is_allowed: true };
 const allowShoot = shooting => (shooting.is_allowed = true);
 
-export const keyController = (keyHelper, bool, e) => {
+const keyController = (keyHelper, bool, e) => {
   switch (e.code) {
     case "KeyA":
     case "ArrowLeft":
@@ -69,4 +69,14 @@ export const keyController = (keyHelper, bool, e) => {
     default:
       break;
   }
+};
+
+export const activateKeyboardInput = (socket, keyStatus) => {
+  document.onkeydown = keyController.bind(null, keyStatus, true);
+  document.onkeyup = keyController.bind(null, keyStatus, false);
+
+  window.addEventListener("pressed", () => {
+    socket.send(JSON.stringify(keyStatus));
+    keyStatus.shoot = false;
+  });
 };

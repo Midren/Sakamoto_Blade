@@ -30,21 +30,21 @@ export class MovableObject extends GameObject {
   onCollision(other) {
     let sideOfCollision = this.isCollision(other);
     switch (sideOfCollision) {
-      case 1:
+      case UP:
         this.onGround = true;
         this.coordinates.y = other.coordinates.y - this.size.height + 1;
         return true;
-      case 2:
+      case DOWN:
         this.onGround = false;
         this.coordinates.y = other.coordinates.y + other.size.height + 1;
         return true;
-      case 3:
+      case RIGHT:
         this.coordinates.x = other.coordinates.x - this.size.width - 10;
         return true;
-      case 4:
+      case LEFT:
         this.coordinates.x = other.coordinates.x + other.size.width + 10;
         return true;
-      case 0:
+      default:
         break;
     }
     return false;
