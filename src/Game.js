@@ -5,22 +5,21 @@ import { playTrack, backGroundAnimation, getSong } from "./media";
 import { generateMap } from "./field";
 
 const activateGameField = () => {
-  Object.values(document.querySelectorAll(".game-field__game-status")).map(
-    val => val.classList.add("game-field__game-status_disabled")
-  );
+  document
+    .querySelector(".game-field__game-status")
+    .classList.add("game-field__game-status_disabled");
   Object.values(document.querySelectorAll(".game-field__canvas")).map(val =>
     val.classList.remove("game-field__canvas_disabled")
   );
 };
 
 const showGameOver = () => {
+  Object.values(document.querySelectorAll(".game-field__canvas")).map(val =>
+    val.classList.add("game-field__canvas_disabled")
+  );
+  document.querySelector(".game-field__game-status").src = "img/game_over.jpg";
   document
-    .getElementsByClassName("game-field__canvas")[0]
-    .classList.add("game-field__canvas_disabled");
-  document.getElementsByClassName("game-field__game-status")[0].src =
-    "img/game_over.jpg";
-  document
-    .getElementsByClassName("game-field__game-status")[0]
+    .querySelector(".game-field__game-status")
     .classList.remove("game-field__game-status_disabled");
 };
 
