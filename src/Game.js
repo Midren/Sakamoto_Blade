@@ -125,7 +125,31 @@ export class Game {
     Promise.all([Game.playerImg, Game.blocksImg, Game.backgroundImg]).then(
       values => {
         try {
-          startGame(this.ctx, socket, this.keyController, values, this.id);
+          // _startGame(this.ctx, socket, this.keyController, values, this.id);
+          const [playerImgs, blocksImg, backgroundImg] = values;
+          const [platformSprite, lavaSprite] = blocksImg;
+          Bullet.img = lavaSprite;
+          Player.img = playerImgs;
+
+          activateGameField();
+
+          let keyStatus = {
+            left: false,
+            right: false,
+            up: false,
+            hit: false,
+            shoot: false
+          };
+
+          let movableObjects = [];
+          let field = generateMap(platformSprite);
+
+          activateKeyboardInput(socket, keyStatus, this.keyController, this.id);
+          startListenFromServer(socket, movableObjects);
+
+          let background = backGroundAnimation(this.ctx, backgroundImg);
+          socket.send(JSON.stringify({ player_id: this.id, keyStatus: keyStatus }));
+          render(this.ctx, movableObjects, field, background, keyStatus);
         } catch (error) {
           console.log(error);
         }
@@ -133,34 +157,3 @@ export class Game {
     );
   }
 }
-
-const startGame = (
-  ctx,
-  socket,
-  keyController,
-  [playerImgs, blocksImg, backgroundImg],
-  id
-) => {
-  const [platformSprite, lavaSprite] = blocksImg;
-  Bullet.img = lavaSprite;
-  Player.img = playerImgs;
-
-  activateGameField();
-
-  let keyStatus = {
-    left: false,
-    right: false,
-    up: false,
-    hit: false,
-    shoot: false
-  };
-
-  let movableObjects = [];
-  let field = generateMap(platformSprite);
-
-  activateKeyboardInput(socket, keyStatus, keyController, id);
-  startListenFromServer(socket, movableObjects);
-
-  let background = backGroundAnimation(ctx, backgroundImg);
-  render(ctx, movableObjects, field, background, keyStatus);
-};
