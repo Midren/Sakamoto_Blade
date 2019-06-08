@@ -41,25 +41,22 @@ setInterval(() => {
 }, 1000 / 60);
 
 wsServer.on("connection", (ws, req) => {
-  ws.id = ++playerId;
-  players[ws.id] = new Player(
-      ws.id,
-      { x: 120, y: 180 },
-      { height: CELL_SIZE, width: CELL_SIZE },
-      { x: 0, y: 0 },
-      1
-  );
   ws.on("message", message => {
-    let player = players[ws.id];
-    if (!player) {
-      ws.send("game_over");
-      return;
-    }
-    keyHandler(JSON.parse(message), player, bullets);
+    const decodedMessage = JSON.parse(message);
+    let player = players[decodedMessage.player_id]
+      ? players[decodedMessage.player_id]
+      : new Player(
+          decodedMessage.player_id,
+          { x: 120, y: 180 },
+          { height: CELL_SIZE, width: CELL_SIZE },
+          { x: 0, y: 0 },
+          1
+        );
+    keyHandler(decodedMessage.keyStatus, player, bullets);
   });
 
   ws.on("close", (reasonCode, desc) => {
-    delete players[ws.id];
+    players.length = 0;
   });
 });
 
