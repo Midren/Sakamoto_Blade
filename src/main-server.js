@@ -35,7 +35,7 @@ wsServer.broadcast = data => {
 setInterval(() => {
   handleCollisions(players, bullets, field);
   moveObjects([...players, ...bullets]);
-  removeDeadPlayers(players);
+  removeDeadPlayers(players, wsServer);
 
   wsServer.broadcast(serializeObjects([...players, ...bullets]));
 }, 1000 / 60);
@@ -43,11 +43,11 @@ setInterval(() => {
 wsServer.on("connection", (ws, req) => {
   ws.id = ++playerId;
   players[ws.id] = new Player(
-    ws.id,
-    { x: 120, y: 180 },
-    { height: CELL_SIZE, width: CELL_SIZE },
-    { x: 0, y: 0 },
-    1
+      ws.id,
+      { x: 120, y: 180 },
+      { height: CELL_SIZE, width: CELL_SIZE },
+      { x: 0, y: 0 },
+      1
   );
   ws.on("message", message => {
     let player = players[ws.id];
