@@ -1,5 +1,4 @@
 import { GameObject } from "./GameObjects";
-
 const UP = 1,
   DOWN = 2,
   RIGHT = 3,
@@ -28,7 +27,6 @@ export class MovableObject extends GameObject {
       this.speed.y = 15;
     }
   }
-
   onCollision(other) {
     let sideOfCollision = this.isCollision(other);
     switch (sideOfCollision) {
@@ -51,27 +49,8 @@ export class MovableObject extends GameObject {
     }
     return false;
   }
-
-  isCollision(other) {
-    let isVerticalCollision = 0,
-      isHorizontalCollision = 0;
-    if (
-      this.coordinates.y + this.size.height > other.coordinates.y &&
-      this.coordinates.y < other.coordinates.y + other.size.height
-    ) {
-      if (
-        this.coordinates.x < other.coordinates.x &&
-        this.coordinates.x + this.size.width > other.coordinates.x
-      ) {
-        isHorizontalCollision = RIGHT;
-      }
-      if (
-        this.coordinates.x > other.coordinates.x &&
-        this.coordinates.x < other.coordinates.x + other.size.width
-      ) {
-        isHorizontalCollision = LEFT;
-      }
-    }
+  getVerticalCollision(other) {
+    let isVerticalCollision = 0;
     if (
       this.coordinates.x + this.size.width > other.coordinates.x &&
       this.coordinates.x < other.coordinates.x + other.size.width
@@ -89,57 +68,51 @@ export class MovableObject extends GameObject {
         isVerticalCollision = DOWN;
       }
     }
+    return isVerticalCollision;
+  }
+  getHorizontalCollision(other) {
+    let isHorizontalCollision = 0;
+    if (
+      this.coordinates.y + this.size.height > other.coordinates.y &&
+      this.coordinates.y < other.coordinates.y + other.size.height
+    ) {
+      if (
+        this.coordinates.x < other.coordinates.x &&
+        this.coordinates.x + this.size.width > other.coordinates.x
+      ) {
+        isHorizontalCollision = RIGHT;
+      }
+      if (
+        this.coordinates.x > other.coordinates.x &&
+        this.coordinates.x < other.coordinates.x + other.size.width
+      ) {
+        isHorizontalCollision = LEFT;
+      }
+    }
+    return isHorizontalCollision;
+  }
+
+  isCollision(other) {
+    const isHorizontalCollision = this.getHorizontalCollision(other);
+    const isVerticalCollision = this.getVerticalCollision(other);
     if (!isVerticalCollision) return isHorizontalCollision;
     if (!isHorizontalCollision) return isVerticalCollision;
-    let new_this = {
-      [UP]: {
-        [RIGHT]: {
-          x: this.coordinates.x + this.size.width,
-          y: this.coordinates.y + this.size.height
-        },
-        [LEFT]: {
-          x: this.coordinates.x,
-          y: this.coordinates.y + this.size.height
-        }
-      },
-      [DOWN]: {
-        [RIGHT]: {
-          x: this.coordinates.x + this.size.width,
-          y: this.coordinates.y
-        },
-        [LEFT]: { x: this.coordinates.x, y: this.coordinates.y }
-      }
-    };
-    let new_other = {
-      [UP]: {
-        [RIGHT]: { x: other.coordinates.x, y: other.coordinates.y },
-        [LEFT]: {
-          x: other.coordinates.x + other.size.width,
-          y: other.coordinates.y
-        }
-      },
-      [DOWN]: {
-        [RIGHT]: {
-          x: other.coordinates.x,
-          y: other.coordinates.y + other.size.height
-        },
-        [LEFT]: {
-          x: other.coordinates.x + other.size.width,
-          y: other.coordinates.y + other.size.height
-        }
-      }
-    };
+    const currentObjectBoarders = this.getBoarderCoordinates();
+    const otherObjectBoarders = other.getBoarderCoordinates();
     if (isVerticalCollision === DOWN && this.speed.y < 0) {
       return isVerticalCollision;
     }
     return Math.pow(
-      new_other[isVerticalCollision][isHorizontalCollision].x -
-        new_this[isVerticalCollision][isHorizontalCollision].x,
+      otherObjectBoarders[1 + (isVerticalCollision % 2)][
+        3 + (isHorizontalCollision % 2)
+      ].x - currentObjectBoarders[isVerticalCollision][isHorizontalCollision].x,
       2
     ) >=
       Math.pow(
-        new_other[isVerticalCollision][isHorizontalCollision].y -
-          new_this[isVerticalCollision][isHorizontalCollision].y,
+        otherObjectBoarders[1 + (isVerticalCollision % 2)][
+          3 + (isHorizontalCollision % 2)
+        ].y -
+          currentObjectBoarders[isVerticalCollision][isHorizontalCollision].y,
         2
       )
       ? isVerticalCollision
