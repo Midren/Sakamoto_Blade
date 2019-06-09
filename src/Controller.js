@@ -17,6 +17,7 @@ export const keyHandler = (keyStatus, player, bullets) => {
   }
   if (keyStatus.hit) {
   }
+  console.log(keyStatus);
   if (keyStatus.shoot && player.allowedShooting) {
     player.allowedShooting = false;
     setTimeout(() => (player.allowedShooting = true), 500);
@@ -46,7 +47,7 @@ export const wasdKeyController = (keyHelper, bool, e) => {
     KeyD: "right",
     KeyW: "up",
     KeyK: "hit",
-    Space: "hit"
+    Space: "shoot"
   };
   keyController(wasdBinding, keyHelper, bool, e);
 };
@@ -57,7 +58,7 @@ export const arrowKeyController = (keyHelper, bool, e) => {
     ArrowRight: "right",
     ArrowUp: "up",
     KeyK: "hit",
-    KeyJ: "hit"
+    KeyJ: "shoot"
   };
   keyController(arrowBinding, keyHelper, bool, e);
 };
@@ -74,6 +75,5 @@ export const activateKeyboardInput = (socket, keyStatus, keyController, id) => {
 
   window.addEventListener("pressed", () => {
     socket.send(JSON.stringify({ player_id: id, keyStatus: keyStatus }));
-    keyStatus.shoot = false;
   });
 };
