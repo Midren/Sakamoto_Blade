@@ -38,6 +38,8 @@ export const generateMap = blockImg => {
             { height: CELL_HEIGHT, width: CELL_WIDTH },
             blockImg
           )
+        : val === EMPTY
+        ? null
         : null
     )
     .filter(val => val);

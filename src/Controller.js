@@ -17,7 +17,6 @@ export const keyHandler = (keyStatus, player, bullets) => {
   }
   if (keyStatus.hit) {
   }
-  console.log(keyStatus);
   if (keyStatus.shoot && player.allowedShooting) {
     player.allowedShooting = false;
     setTimeout(() => (player.allowedShooting = true), 500);

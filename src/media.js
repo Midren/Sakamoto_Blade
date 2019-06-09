@@ -23,7 +23,7 @@ export const backGroundAnimation = (ctx, backgroundImg) => {
   return background;
 };
 
-const loadImg = async src =>
+export const loadImg = async src =>
   new Promise((res, rej) => {
     let img = new Image();
     let timer = setTimeout(() => rej(new Error("Timeout")), 10000);
@@ -45,6 +45,9 @@ export const loadImgsAsKeyValue = async imagesSrc => {
     return accum;
   }, {});
 };
+
+export const gameOverImgSrc = "img/game_over.jpg";
+export const loadingImgSrc = "img/loading.png";
 
 export const playerImagesSrc = [
   "img/player/0l.png",

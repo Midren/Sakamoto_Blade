@@ -1,7 +1,13 @@
 import { activateKeyboardInput } from "./Controller";
 import { Bullet } from "./Bullet";
 import { Player } from "./Player";
-import { backGroundAnimation } from "./media";
+import {
+  backGroundAnimation,
+  getSong,
+  loadImg,
+  loadingImgSrc,
+  playTrack
+} from "./media";
 import {
   generateMap,
   FIELD_WIDTH,
@@ -15,58 +21,24 @@ import {
   blocksImagesSrc,
   backgroundImagesSrc
 } from "./media";
-
-const activateGameField = () => {
-  document
-    .querySelector(".game-field__game-status")
-    .classList.add("game-field__game-status_disabled");
-  Object.values(document.querySelectorAll(".game-field__canvas")).map(val => {
-    val.classList.remove("game-field__canvas_disabled");
-    val.setAttribute("height", FIELD_HEIGHT);
-    val.setAttribute("width", FIELD_WIDTH);
-  });
-};
-
-const showGameOver = () => {
-  Object.values(document.querySelectorAll(".game-field__canvas")).map(val =>
-    val.classList.add("game-field__canvas_disabled")
-  );
-  document.querySelector(".game-field__game-status").src = "img/game_over.jpg";
-  document
-    .querySelector(".game-field__game-status")
-    .classList.remove("game-field__game-status_disabled");
-};
-
-const clear = ctx => ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
-const drawImage = (ctx, image, options = {}) => {
-  const imgBbox = image;
-
-  let {
-    x = 0,
-    y = 0,
-    height = imgBbox.height,
-    width = imgBbox.width
-  } = options;
-
-  ctx.drawImage(image, x, y, width, height);
-};
-
-let _GAME_INSTANCES_NUMBER = 1;
+import { clear, drawImage } from "./canvasHelper";
+let GAME_INSTANCES_NUMBER = 0;
 
 export class Game {
-  constructor(container, keyController) {
-    this.container = container;
-    let canvas = document.createElement("canvas");
-    canvas.className =
-      container.classList[0] +
-      `__canvas ` +
-      container.classList[0] +
-      `__canvas_disabled`;
-    container.appendChild(canvas);
+  constructor(canvas, keyControllers) {
     this.ctx = canvas.getContext("2d");
-    this.keyController = keyController;
-    this.id = _GAME_INSTANCES_NUMBER++;
+    loadImg(loadingImgSrc).then(val =>
+      drawImage(this.ctx, val, { height: FIELD_HEIGHT, width: FIELD_WIDTH })
+    );
+
+    const audioCtx = new AudioContext();
+    getSong(audioCtx, "music/MOON_Dust.ogg").then(song =>
+      playTrack(audioCtx, song)
+    );
+    canvas.setAttribute("height", FIELD_HEIGHT);
+    canvas.setAttribute("width", FIELD_WIDTH);
+    this.keyControllers = keyControllers;
+    this.id = GAME_INSTANCES_NUMBER++;
 
     if (!Game.playerImg) {
       Game.playerImg = loadImages(playerImagesSrc);
@@ -85,27 +57,30 @@ export class Game {
           Bullet.img = lavaSprite;
           Player.img = playerImgs;
 
-          activateGameField();
-
-          let keyStatus = {
-            left: false,
-            right: false,
-            up: false,
-            hit: false,
-            shoot: false
-          };
-
           let movableObjects = [];
           let field = generateMap(platformSprite);
-
-          activateKeyboardInput(socket, keyStatus, this.keyController, this.id);
           this.startListenFromServer(movableObjects);
-
           let background = backGroundAnimation(this.ctx, backgroundImg);
-          socket.send(
-            JSON.stringify({ player_id: this.id, keyStatus: keyStatus })
-          );
-          this.render(movableObjects, field, background, keyStatus);
+
+          let playerStatueses = [];
+          this.keyControllers.forEach(keyController => {
+            let keyStatus = {
+              left: false,
+              right: false,
+              up: false,
+              hit: false,
+              shoot: false
+            };
+            this.id++;
+
+            activateKeyboardInput(socket, keyStatus, keyController, this.id);
+
+            playerStatueses.push(keyStatus);
+            socket.send(
+              JSON.stringify({ player_id: this.id, keyStatus: keyStatus })
+            );
+          });
+          this.render(movableObjects, field, background, playerStatueses);
         } catch (error) {
           console.log(error);
         }
@@ -113,13 +88,16 @@ export class Game {
     );
   }
 
-  render(movableObjects, field, background, keyStatus) {
+  render(movableObjects, field, background, players) {
     const render = () => {
       clear(this.ctx);
       drawImage(this.ctx, background.image);
 
-      if (Object.values(keyStatus).some(val => val))
-        window.dispatchEvent(new Event("pressed"));
+      players.forEach(keyStatus =>
+        Object.values(keyStatus).some(val => val)
+          ? window.dispatchEvent(new Event("pressed"))
+          : null
+      );
 
       [...field, ...movableObjects].forEach(obj => obj.render(this.ctx));
       requestAnimationFrame(render);
@@ -133,7 +111,6 @@ export class Game {
       movableObjects.length = 0;
       if (event.data === "game_over") {
         this.socket.close();
-        showGameOver();
         return;
       }
       JSON.parse(event.data).forEach(entity =>
