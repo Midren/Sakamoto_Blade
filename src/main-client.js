@@ -6,13 +6,12 @@ const port = "3000";
 let playerActions = new WebSocket(`ws://${host}:${port}`);
 
 playerActions.addEventListener("open", () => {
-  let game1 = new Game(document.querySelectorAll(".game-field__canvas")[0], [
-    wasdKeyController
-  ]);
-  let game2 = new Game(document.querySelectorAll(".game-field__canvas")[1], [
-    arrowKeyController
-  ]);
+  const [gameOneElement, gameTwoElement] = document.querySelectorAll(
+    ".game-field__canvas"
+  );
+  let game1 = new Game(gameOneElement, [wasdKeyController, arrowKeyController]);
+  // let game2 = new Game(gameTwoElement, [arrowKeyController]);
 
   game1.start(playerActions);
-  game2.start(playerActions);
+  // game2.start(playerActions);
 });
