@@ -14,8 +14,7 @@ let playerActions = new WebSocket(`ws://${host}:${port}`);
 playerActions.addEventListener("open", () => {
   let game1 = new Game(
     document.querySelector(".game-field"),
-    wasdKeyController
-  );
+    wasdKeyController);
   let game2 = new Game(
     document.querySelector(".game-field"),
     arrowKeyController

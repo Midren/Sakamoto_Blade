@@ -55,7 +55,6 @@ wsServer.on("connection", (ws, req) => {
           : { x: FIELD_WIDTH - 120, y: 100 };
       players[decodedMessage.player_id] = new Player(
         decodedMessage.player_id,
-        // { x: 120, y: 180 },
         coordinates,
         { height: CELL_HEIGHT, width: CELL_WIDTH },
         { x: 0, y: 0 },
