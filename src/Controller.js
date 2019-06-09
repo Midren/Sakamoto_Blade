@@ -17,7 +17,9 @@ export const keyHandler = (keyStatus, player, bullets) => {
   }
   if (keyStatus.hit) {
   }
-  if (keyStatus.shoot) {
+  if (keyStatus.shoot && player.allowedShooting) {
+    player.allowedShooting = false;
+    setTimeout(() => (player.allowedShooting = true), 500);
     let x =
       player.coordinates.x + (player.direction === -1 ? -5 : player.size.width);
     bullets.push(
@@ -30,9 +32,6 @@ export const keyHandler = (keyStatus, player, bullets) => {
     );
   }
 };
-
-let shooting = { is_allowed: true };
-const allowShoot = shooting => (shooting.is_allowed = true);
 
 export const wasdKeyController = (keyHelper, bool, e) => {
   switch (e.code) {
@@ -54,13 +53,7 @@ export const wasdKeyController = (keyHelper, bool, e) => {
       break;
     case "Space":
       e.preventDefault();
-      if (shooting.is_allowed && bool === true) {
-        keyHelper.shoot = bool;
-        shooting.is_allowed = false;
-        setTimeout(allowShoot.bind(null, shooting), 500);
-      } else {
-        keyHelper.shoot = false;
-      }
+      keyHelper.shoot = bool;
       break;
     default:
       break;
@@ -87,13 +80,7 @@ export const arrowKeyController = (keyHelper, bool, e) => {
       break;
     case "KeyJ":
       e.preventDefault();
-      if (shooting.is_allowed && bool === true) {
-        keyHelper.shoot = bool;
-        shooting.is_allowed = false;
-        setTimeout(allowShoot.bind(null, shooting), 500);
-      } else {
-        keyHelper.shoot = false;
-      }
+      keyHelper.shoot = bool;
       break;
     default:
       break;

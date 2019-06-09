@@ -2,16 +2,11 @@ import { MovableObject } from "./MovableObject";
 
 export class Player extends MovableObject {
   constructor(id, coordinates, size, speed, direction, images = Player.img) {
-    super(
-      id,
-      coordinates,
-      size,
-      speed,
-      images ? images[0] : null
-    );
+    super(id, coordinates, size, speed, images ? images[0] : null);
     this.images = images;
     this.direction = direction;
     this.hitPoints = 3;
+    this.allowedShooting = true;
   }
 
   move() {
