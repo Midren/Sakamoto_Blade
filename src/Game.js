@@ -22,6 +22,8 @@ import {
   backgroundImagesSrc
 } from "./media";
 import { clear, drawImage } from "./canvasHelper";
+import { PubSub } from "./PubSub";
+
 let GAME_INSTANCES_NUMBER = 0;
 
 export class Game {
@@ -39,6 +41,7 @@ export class Game {
     canvas.setAttribute("width", FIELD_WIDTH);
     this.keyControllers = keyControllers;
     this.id = GAME_INSTANCES_NUMBER++;
+    this.playerActionsPublisher = new PubSub();
 
     if (!Game.playerImg) {
       Game.playerImg = loadImages(playerImagesSrc);
@@ -74,11 +77,15 @@ export class Game {
             this.id++;
 
             activateKeyboardInput(socket, keyStatus, keyController, this.id);
-
             playerStatueses.push(keyStatus);
-            socket.send(
-              JSON.stringify({ player_id: this.id, keyStatus: keyStatus })
+            let playerId = this.id;
+            this.playerActionsPublisher.subscribe(data =>
+              socket.send(
+                JSON.stringify({ player_id: playerId, keyStatus: keyStatus })
+              )
             );
+
+            this.playerActionsPublisher.publish();
           });
           this.render(movableObjects, field, background, playerStatueses);
         } catch (error) {
@@ -95,7 +102,7 @@ export class Game {
 
       players.forEach(keyStatus =>
         Object.values(keyStatus).some(val => val)
-          ? window.dispatchEvent(new Event("pressed"))
+          ? this.playerActionsPublisher.publish()
           : null
       );
 
@@ -109,10 +116,6 @@ export class Game {
   startListenFromServer(movableObjects) {
     this.socket.addEventListener("message", event => {
       movableObjects.length = 0;
-      if (event.data === "game_over") {
-        this.socket.close();
-        return;
-      }
       JSON.parse(event.data).forEach(entity =>
         entity && entity.id
           ? movableObjects.push(
