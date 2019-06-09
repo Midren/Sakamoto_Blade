@@ -1,5 +1,5 @@
 import { Player } from "./Player";
-import { keyHandler } from "./Controller";
+import { actionHandler } from "./Controller";
 import {
   generateMap,
   CELL_WIDTH,
@@ -62,7 +62,7 @@ wsServer.on("connection", (ws, req) => {
       );
     }
     let player = players[decodedMessage.player_id];
-    keyHandler(decodedMessage.keyStatus, player, bullets);
+    actionHandler(decodedMessage.keyStatus, player, bullets);
   });
 
   ws.on("close", (reasonCode, desc) => {

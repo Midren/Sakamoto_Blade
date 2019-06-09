@@ -1,6 +1,6 @@
 import { Bullet } from "./Bullet";
 
-export const keyHandler = (keyStatus, player, bullets) => {
+export const actionHandler = (keyStatus, player, bullets) => {
   if (keyStatus.left) {
     player.speed.x += 1.5;
     player.direction = -1;

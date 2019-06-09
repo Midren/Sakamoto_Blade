@@ -94,10 +94,12 @@ export class Game {
       }
     );
   }
-
+  clear() {
+    clear(this.ctx);
+  }
   render(movableObjects, field, background, players) {
     const render = () => {
-      clear(this.ctx);
+      this.clear();
       drawImage(this.ctx, background.image);
 
       players.forEach(keyStatus =>
