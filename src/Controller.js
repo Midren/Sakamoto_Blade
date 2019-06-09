@@ -17,7 +17,9 @@ export const keyHandler = (keyStatus, player, bullets) => {
   }
   if (keyStatus.hit) {
   }
-  if (keyStatus.shoot) {
+  if (keyStatus.shoot && player.allowedShooting) {
+    player.allowedShooting = false;
+    setTimeout(() => (player.allowedShooting = true), 500);
     let x =
       player.coordinates.x + (player.direction === -1 ? -5 : player.size.width);
     bullets.push(
@@ -31,13 +33,10 @@ export const keyHandler = (keyStatus, player, bullets) => {
   }
 };
 
-let shooting = { is_allowed: true };
-const allowShoot = shooting => (shooting.is_allowed = true);
-
 const keyController = (keyBindings, keyHelper, bool, e) => {
   if (e.code in keyBindings) {
-    e.preventDefault();
     keyHelper[keyBindings[e.code]] = bool;
+    e.preventDefault();
   }
 };
 
