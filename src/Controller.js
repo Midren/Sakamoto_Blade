@@ -34,70 +34,33 @@ export const keyHandler = (keyStatus, player, bullets) => {
 let shooting = { is_allowed: true };
 const allowShoot = shooting => (shooting.is_allowed = true);
 
-export const wasdKeyController = (keyHelper, bool, e) => {
-  switch (e.code) {
-    case "KeyA":
-      e.preventDefault();
-      keyHelper.left = bool;
-      break;
-    case "KeyD":
-      e.preventDefault();
-      keyHelper.right = bool;
-      break;
-    case "KeyW":
-      e.preventDefault();
-      keyHelper.up = bool;
-      break;
-    case "KeyK":
-      e.preventDefault();
-      keyHelper.hit = bool;
-      break;
-    case "Space":
-      e.preventDefault();
-      if (shooting.is_allowed && bool === true) {
-        keyHelper.shoot = bool;
-        shooting.is_allowed = false;
-        setTimeout(allowShoot.bind(null, shooting), 500);
-      } else {
-        keyHelper.shoot = false;
-      }
-      break;
-    default:
-      break;
+const keyController = (keyBindings, keyHelper, bool, e) => {
+  if (e.code in keyBindings) {
+    e.preventDefault();
+    keyHelper[keyBindings[e.code]] = bool;
   }
 };
 
+export const wasdKeyController = (keyHelper, bool, e) => {
+  const wasdBinding = {
+    KeyA: "left",
+    KeyD: "right",
+    KeyW: "up",
+    KeyK: "hit",
+    Space: "hit"
+  };
+  keyController(wasdBinding, keyHelper, bool, e);
+};
+
 export const arrowKeyController = (keyHelper, bool, e) => {
-  switch (e.code) {
-    case "ArrowLeft":
-      e.preventDefault();
-      keyHelper.left = bool;
-      break;
-    case "ArrowRight":
-      e.preventDefault();
-      keyHelper.right = bool;
-      break;
-    case "ArrowUp":
-      e.preventDefault();
-      keyHelper.up = bool;
-      break;
-    case "KeyK":
-      e.preventDefault();
-      keyHelper.hit = bool;
-      break;
-    case "KeyJ":
-      e.preventDefault();
-      if (shooting.is_allowed && bool === true) {
-        keyHelper.shoot = bool;
-        shooting.is_allowed = false;
-        setTimeout(allowShoot.bind(null, shooting), 500);
-      } else {
-        keyHelper.shoot = false;
-      }
-      break;
-    default:
-      break;
-  }
+  const arrowBinding = {
+    ArrowLeft: "left",
+    ArrowRight: "right",
+    ArrowUp: "up",
+    KeyK: "hit",
+    KeyJ: "hit"
+  };
+  keyController(arrowBinding, keyHelper, bool, e);
 };
 
 export const activateKeyboardInput = (socket, keyStatus, keyController, id) => {
