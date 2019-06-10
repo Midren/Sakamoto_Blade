@@ -134,9 +134,6 @@ export class Game {
             players.forEach(player => this.playerActionsPublisher.publish(player));
             field.forEach(obj => obj.render(this.ctx));
             movableObjects.forEach(obj => obj.render(this.ctx));
-            // movableObjects.forEach(obj =>
-            //   field.forEach(block => obj.renderCollisionGrid(block, this.ctx))
-            // );
             requestAnimationFrame(render);
         };
 
