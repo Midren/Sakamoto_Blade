@@ -27,8 +27,8 @@ export const fieldBlueprint = [
 const PLATFORM = "#";
 const EMPTY = ".";
 
-export const FIELD_WIDTH = 900;
-export const FIELD_HEIGHT = 525;
+export const FIELD_WIDTH = 1200;
+export const FIELD_HEIGHT = 700;
 export const CELL_WIDTH = FIELD_WIDTH / fieldBlueprint[0].length;
 export const CELL_HEIGHT = FIELD_HEIGHT / fieldBlueprint.length;
 

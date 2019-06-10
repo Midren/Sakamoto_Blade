@@ -12,7 +12,7 @@ export const actionHandler = (keyStatus, player, bullets) => {
   }
   if (keyStatus.up) {
     if (player.onGround) {
-      player.speed.y = -18;
+      player.speed.y = -22;
       player.onGround = false;
     }
   }
