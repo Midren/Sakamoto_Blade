@@ -1,6 +1,6 @@
 import { Bullet } from "./Bullet";
 
-export const keyHandler = (keyStatus, player, bullets) => {
+export const actionHandler = (keyStatus, player, bullets) => {
   if (keyStatus.left) {
     player.speed.x += 1.5;
     player.direction = -1;
@@ -71,8 +71,4 @@ export const activateKeyboardInput = (socket, keyStatus, keyController, id) => {
     "keyup",
     keyController.bind(null, keyStatus, false)
   );
-
-  window.addEventListener("pressed", () => {
-    socket.send(JSON.stringify({ player_id: id, keyStatus: keyStatus }));
-  });
 };
