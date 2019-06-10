@@ -99,7 +99,14 @@ export class Game {
           : null
       );
 
-      [...field, ...movableObjects].forEach(obj => obj.render(this.ctx));
+      field.forEach(obj => obj.render(this.ctx));
+      movableObjects.forEach(obj => obj.render(this.ctx));
+
+      // movableObjects.forEach(obj => {
+      //   field.forEach(block => {
+      //     obj.renderCollisionGrid(block, this.ctx);
+      //   });
+      // });
       requestAnimationFrame(render);
     };
 
@@ -120,7 +127,8 @@ export class Game {
                 entity.id,
                 entity.coordinates,
                 { height: CELL_HEIGHT, width: CELL_WIDTH },
-                { x: 1, y: 0 },
+                // { x: 1, y: 0 },
+                entity.speed,
                 entity.direction
               )
             )

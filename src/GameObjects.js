@@ -11,22 +11,22 @@ export class GameObject {
   }
   getBoarderCoordinates() {
     return {
-      [UP]: {
-        [RIGHT]: {
+      [DOWN]: {
+        [LEFT]: {
           x: this.coordinates.x + this.size.width,
           y: this.coordinates.y + this.size.height
         },
-        [LEFT]: {
+        [RIGHT]: {
           x: this.coordinates.x,
           y: this.coordinates.y + this.size.height
         }
       },
-      [DOWN]: {
-        [RIGHT]: {
+      [UP]: {
+        [LEFT]: {
           x: this.coordinates.x + this.size.width,
           y: this.coordinates.y
         },
-        [LEFT]: { x: this.coordinates.x, y: this.coordinates.y }
+        [RIGHT]: { x: this.coordinates.x, y: this.coordinates.y }
       }
     };
   }
