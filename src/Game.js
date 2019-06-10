@@ -99,7 +99,29 @@ export class Game {
           : null
       );
 
-      [...field, ...movableObjects].forEach(obj => obj.render(this.ctx));
+      field.forEach(obj => obj.render(this.ctx));
+      movableObjects.forEach(obj => obj.render(this.ctx));
+      movableObjects.forEach(obj => {
+        this.ctx.beginPath();
+        this.ctx.lineWidth = 5;
+        this.ctx.moveTo(
+          obj.coordinates.x + obj.size.width / 2,
+          obj.coordinates.y + obj.size.width / 2
+        );
+        this.ctx.lineTo(
+          obj.coordinates.x +
+            obj.size.width / 2 +
+            obj.speed.x * 5 * obj.direction,
+          obj.coordinates.y + +obj.size.height / 2 + obj.speed.y * 2.5
+        );
+        this.ctx.stroke();
+      });
+
+      movableObjects.forEach(obj => {
+        field.forEach(block => {
+          obj.isCollisionTEMP(block, this.ctx);
+        });
+      });
       requestAnimationFrame(render);
     };
 
@@ -120,7 +142,8 @@ export class Game {
                 entity.id,
                 entity.coordinates,
                 { height: CELL_HEIGHT, width: CELL_WIDTH },
-                { x: 1, y: 0 },
+                // { x: 1, y: 0 },
+                entity.speed,
                 entity.direction
               )
             )
