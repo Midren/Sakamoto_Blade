@@ -16,12 +16,6 @@ import {
   CELL_HEIGHT,
   singleSpritesLoader
 } from "./field";
-// import {
-//   loadImages,
-//   playerImagesSrc,
-//   blocksImagesSrc,
-//   backgroundImagesSrc
-// } from "./media";
 import { clear, drawImage } from "./canvasHelper";
 import { PubSub } from "./PubSub";
 
@@ -99,7 +93,7 @@ export class Game {
   render(movableObjects, field, background, players) {
     const render = () => {
       this.clear();
-      drawImage(this.ctx, background.image);
+      drawImage(this.ctx, background.image, { height: FIELD_HEIGHT, width: FIELD_WIDTH });
 
       players.forEach(player => this.playerActionsPublisher.publish(player));
       field.forEach(obj => obj.render(this.ctx));
