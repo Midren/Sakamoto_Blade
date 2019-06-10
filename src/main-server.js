@@ -48,20 +48,20 @@ setInterval(() => {
 wsServer.on("connection", (ws, req) => {
   ws.on("message", message => {
     const decodedMessage = JSON.parse(message);
-    if (!players[decodedMessage.player_id]) {
+    if (!players[decodedMessage.playerId]) {
       let coordinates =
-        decodedMessage.player_id % 2
+        decodedMessage.playerId % 2
           ? { x: 120, y: 100 }
           : { x: FIELD_WIDTH - 120, y: 100 };
-      players[decodedMessage.player_id] = new Player(
-        decodedMessage.player_id,
+      players[decodedMessage.playerId] = new Player(
+        decodedMessage.playerId,
         coordinates,
         { height: CELL_HEIGHT, width: CELL_WIDTH },
         { x: 0, y: 0 },
         1
       );
     }
-    let player = players[decodedMessage.player_id];
+    let player = players[decodedMessage.playerId];
     actionHandler(decodedMessage.keyStatus, player, bullets);
   });
 
