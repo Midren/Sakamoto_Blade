@@ -101,27 +101,12 @@ export class Game {
 
       field.forEach(obj => obj.render(this.ctx));
       movableObjects.forEach(obj => obj.render(this.ctx));
-      movableObjects.forEach(obj => {
-        this.ctx.beginPath();
-        this.ctx.lineWidth = 5;
-        this.ctx.moveTo(
-          obj.coordinates.x + obj.size.width / 2,
-          obj.coordinates.y + obj.size.width / 2
-        );
-        this.ctx.lineTo(
-          obj.coordinates.x +
-            obj.size.width / 2 +
-            obj.speed.x * 5 * obj.direction,
-          obj.coordinates.y + +obj.size.height / 2 + obj.speed.y * 2.5
-        );
-        this.ctx.stroke();
-      });
 
-      movableObjects.forEach(obj => {
-        field.forEach(block => {
-          obj.isCollisionTEMP(block, this.ctx);
-        });
-      });
+      // movableObjects.forEach(obj => {
+      //   field.forEach(block => {
+      //     obj.renderCollisionGrid(block, this.ctx);
+      //   });
+      // });
       requestAnimationFrame(render);
     };
 

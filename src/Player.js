@@ -23,9 +23,9 @@ export class Player extends MovableObject {
       this.coordinates.x,
       this.coordinates.y
     );
-    if (this.direction === -1 && this.speed.x) {
+    if (this.direction === -1) {
       this.image = this.images[1];
-    } else if (this.direction === 1 && this.speed.x) {
+    } else if (this.direction === 1) {
       this.image = this.images[2];
     }
     super.render(ctx);
