@@ -2,11 +2,11 @@ import { Bullet } from "./Bullet";
 
 export const actionHandler = (keyStatus, player, bullets) => {
   if (keyStatus.left) {
-    player.speed.x += 1.5;
+    player.speed.x += 1;
     player.direction = -1;
   }
   if (keyStatus.right) {
-    player.speed.x += 1.5;
+    player.speed.x += 1;
     player.direction = 1;
   }
   if (keyStatus.up) {

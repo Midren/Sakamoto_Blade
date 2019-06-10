@@ -123,7 +123,7 @@ export class MovableObject extends GameObject {
       x2:
         this.coordinates.x +
         this.size.width / 2 +
-        this.speed.x * this.direction,
+        this.speed.x * 2 * this.direction,
       y2: this.coordinates.y + +this.size.height / 2 + this.speed.y * 3
     };
 
