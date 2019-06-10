@@ -38,10 +38,14 @@ export class Game {
     this.keyControllers = keyControllers;
     this.id = GAME_INSTANCES_NUMBER++;
     this.playerActionsPublisher = new PubSub();
+    this.actionProcessor = new PubSub();
   }
 
   start(playerActions) {
     this.playerActions = playerActions;
+    this.playerActions.addEventListener("message", event =>
+      this.actionProcessor.publish(JSON.parse(event.data))
+    );
     this.sprites.then(values => {
       try {
         const [playerImgs, blocksImg, backgroundImg] = values;
@@ -76,7 +80,9 @@ export class Game {
           this.playerActionsPublisher.publish(players[players.length - 1]);
         });
         let field = generateMap(platformSprite);
-        this.startListenFromServer(movableObjects);
+        this.actionProcessor.subscribe(data => {
+          this.updateScene(movableObjects, data);
+        });
 
         let background = backGroundAnimation(this.ctx, backgroundImg);
         this.render(movableObjects, field, background, players);
@@ -85,7 +91,33 @@ export class Game {
       }
     });
   }
-
+  updateScene(movableObjects, entities) {
+    movableObjects.length = 0;
+    entities.forEach(entity => {
+      if (entity) {
+        if (entity.id) {
+          movableObjects.push(
+            new Player(
+              entity.id,
+              entity.coordinates,
+              { height: CELL_HEIGHT, width: CELL_WIDTH },
+              entity.speed,
+              entity.direction
+            )
+          );
+        } else {
+          movableObjects.push(
+            new Bullet(
+              entity.id,
+              entity.coordinates,
+              { height: 18, width: 5 },
+              entity.speed
+            )
+          );
+        }
+      }
+    });
+  }
   clear() {
     clear(this.ctx);
   }
@@ -105,33 +137,5 @@ export class Game {
     };
 
     render();
-  }
-
-  startListenFromServer(movableObjects) {
-    this.playerActions.addEventListener("message", event => {
-      movableObjects.length = 0;
-      JSON.parse(event.data).forEach(entity =>
-        entity && entity.id
-          ? movableObjects.push(
-              new Player(
-                entity.id,
-                entity.coordinates,
-                { height: CELL_HEIGHT, width: CELL_WIDTH },
-                entity.speed,
-                entity.direction
-              )
-            )
-          : entity && !entity.id
-          ? movableObjects.push(
-              new Bullet(
-                entity.id,
-                entity.coordinates,
-                { height: 18, width: 5 },
-                entity.speed
-              )
-            )
-          : null
-      );
-    });
   }
 }
