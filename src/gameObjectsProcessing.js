@@ -31,15 +31,15 @@ export const removeDeadPlayers = (players, wsServer) =>
   });
 
 export const serializeObjects = objects =>
-    JSON.stringify(
-        objects.map(obj =>
-            obj
-                ? {
-                    id: obj.id,
-                    coordinates: obj.coordinates,
-                    direction: obj.direction,
-                    speed: obj.speed
-                }
-                : null
-        )
-    );
+  JSON.stringify(
+    objects.map(obj =>
+      obj
+        ? {
+            id: obj.id,
+            coordinates: obj.coordinates,
+            direction: obj.direction,
+            speed: obj.speed
+          }
+        : null
+    )
+  );

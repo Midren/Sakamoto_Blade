@@ -16,12 +16,6 @@ import {
   CELL_HEIGHT,
   singleSpritesLoader
 } from "./field";
-// import {
-//   loadImages,
-//   playerImagesSrc,
-//   blocksImagesSrc,
-//   backgroundImagesSrc
-// } from "./media";
 import { clear, drawImage } from "./canvasHelper";
 import { PubSub } from "./PubSub";
 
@@ -104,6 +98,9 @@ export class Game {
       players.forEach(player => this.playerActionsPublisher.publish(player));
       field.forEach(obj => obj.render(this.ctx));
       movableObjects.forEach(obj => obj.render(this.ctx));
+      // movableObjects.forEach(obj =>
+      //   field.forEach(block => obj.renderCollisionGrid(block, this.ctx))
+      // );
       requestAnimationFrame(render);
     };
 

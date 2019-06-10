@@ -177,7 +177,7 @@ export class MovableObject extends GameObject {
         this.coordinates.x +
         this.size.width / 2 +
         this.speed.x * 10 * this.direction,
-      y2: this.coordinates.y + +this.size.height / 2 + this.speed.y* 3
+      y2: this.coordinates.y + +this.size.height / 2 + this.speed.y * 3
     };
     ctx.strokeStyle = "white";
     ctx.lineWidth = 3;
