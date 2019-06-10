@@ -1,4 +1,5 @@
 import { Bullet } from "./Bullet";
+import * as R from "ramda";
 
 export const actionHandler = (keyStatus, player, bullets) => {
   if (keyStatus.left) {
@@ -33,42 +34,36 @@ export const actionHandler = (keyStatus, player, bullets) => {
   }
 };
 
-const keyController = (keyBindings, keyHelper, bool, e) => {
+const keyController = R.curry((keyBindings, keyHelper, bool, e) => {
   if (e.code in keyBindings) {
     keyHelper[keyBindings[e.code]] = bool;
     e.preventDefault();
   }
-};
+});
 
-export const wasdKeyController = (keyHelper, bool, e) => {
-  const wasdBinding = {
-    KeyA: "left",
-    KeyD: "right",
-    KeyW: "up",
-    KeyK: "hit",
-    Space: "shoot"
-  };
-  keyController(wasdBinding, keyHelper, bool, e);
-};
+export const wasdKeyController = keyController({
+  KeyA: "left",
+  KeyD: "right",
+  KeyW: "up",
+  KeyK: "hit",
+  Space: "shoot"
+});
 
-export const arrowKeyController = (keyHelper, bool, e) => {
-  const arrowBinding = {
-    ArrowLeft: "left",
-    ArrowRight: "right",
-    ArrowUp: "up",
-    KeyK: "hit",
-    KeyJ: "shoot"
-  };
-  keyController(arrowBinding, keyHelper, bool, e);
-};
+export const arrowKeyController = keyController({
+  ArrowLeft: "left",
+  ArrowRight: "right",
+  ArrowUp: "up",
+  KeyK: "hit",
+  KeyJ: "shoot"
+});
 
 export const activateKeyboardInput = (socket, keyStatus, keyController, id) => {
   document.addEventListener(
     "keydown",
-    keyController.bind(null, keyStatus, true)
+    keyController(keyStatus, true)
   );
   document.addEventListener(
     "keyup",
-    keyController.bind(null, keyStatus, false)
+    keyController(keyStatus, false)
   );
 };

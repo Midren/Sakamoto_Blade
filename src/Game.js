@@ -126,10 +126,10 @@ export class Game {
         clear(this.ctx);
     }
 
-    render(movableObjects, field, background, players) {
-        const render = () => {
-            this.clear();
-            drawImage(this.ctx, background.image);
+  render(movableObjects, field, background, players) {
+    const render = () => {
+      this.clear();
+      drawImage(this.ctx, background.image, { height: FIELD_HEIGHT, width: FIELD_WIDTH });
 
             players.forEach(player => this.playerActionsPublisher.publish(player));
             field.forEach(obj => obj.render(this.ctx));
