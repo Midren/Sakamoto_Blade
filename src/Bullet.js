@@ -4,7 +4,7 @@ import { Player } from "./Player";
 export class Bullet extends MovableObject {
   constructor(id, coordinates, size, speed, images = Bullet.img) {
     super(id, coordinates, size, speed, images);
-    this.direction = this.speed.x / Math.abs(this.speed.x);
+    this.direction = 1;
   }
   move() {
     this.coordinates.x += this.speed.x;
