@@ -27,7 +27,7 @@
     "webpack": "^4.32.2",
     "webpack-node-externals": "^1.7.2",
     "ws": "^7.0.0",
-    "yarn": "^1.16.0"
+    "yarn": "^1.17.3"
   },
   "devDependencies": {
     "concurrently": "^4.1.0",
